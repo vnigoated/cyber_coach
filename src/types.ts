@@ -4,6 +4,7 @@ export interface User {
   email?: string;
   role?: 'admin' | 'teacher' | 'student';
   level?: 'beginner' | 'intermediate' | 'advanced';
+  certificates?: string[];
   completedAssessment?: boolean;
   createdAt?: string;
   updatedAt?: string;

@@ -13,9 +13,11 @@ interface ModuleViewerProps {
   courseId: string;
   moduleId: string;
   onBack: () => void;
+  onNavigateToModule?: (moduleId: string) => void;
+  onModuleStatusChange?: () => void;
 }
 
-export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, onBack }) => {
+export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, onBack, onNavigateToModule, onModuleStatusChange }) => {
   const [activeTab, setActiveTab] = useState<'content' | 'lab' | 'test'>('content');
   const [showTest, setShowTest] = useState(false);
   const { user } = useAuth();
@@ -59,10 +61,16 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
   const goToNextModule = () => {
     if (currentIndex >= 0 && currentIndex < allModules.length - 1) {
       const next = allModules[currentIndex + 1];
-      // navigate by reloading parent via onBack pattern: emit a custom event or use window.location
-      // simplest: replace current location hash with next module id (App should support it) — fallback: reload course detail
+      // Prefer calling parent navigation callback if provided
+      if (onNavigateToModule) {
+        onNavigateToModule(next.id);
+        return;
+      }
+
+      // fallback: update history and dispatch event so parent can pick it up
       window.history.pushState({}, '', `/course/${courseId}?module=${next.id}`);
-      window.location.reload();
+      const evt = new CustomEvent('navigateModule', { detail: { moduleId: next.id } });
+      window.dispatchEvent(evt);
     }
   };
 
@@ -74,6 +82,8 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
       if (user?.id) {
         await supabase.from('user_progress').upsert([{ user_id: user.id, course_id: courseId, module_id: moduleId, completed: true, quiz_score: module.testScore ?? null, source: skipTest ? 'manual' : 'test' }]);
         await learningPathService.rebalance(user.id, courseId);
+        // inform parent to refresh progress
+        if (onModuleStatusChange) onModuleStatusChange();
       }
     } catch (e) {
       console.error('Failed to mark module completed:', e);
@@ -83,10 +93,11 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
   const completeCourseAndGenerateCertificate = async () => {
     // mark all modules completed if some are missing (for safety)
     try {
-      if (user?.id) {
+        if (user?.id) {
         const toUpsert = allModules.map(m => ({ user_id: user.id, course_id: courseId, module_id: m.id, completed: true, quiz_score: m.testScore ?? null, source: 'manual-course-complete' }));
         await supabase.from('user_progress').upsert(toUpsert);
-        // show certificate modal
+        // inform parent to refresh progress, then show certificate
+        if (onModuleStatusChange) await onModuleStatusChange();
         setShowCertificate(true);
       } else {
         setShowCertificate(true);
@@ -104,9 +115,10 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
 
     // Persist progress and trigger rebalance
     try {
-      if (user?.id) {
+        if (user?.id) {
         await supabase.from('user_progress').upsert([{ user_id: user.id, course_id: courseId, module_id: moduleId, completed: true, quiz_score: score, source: 'adaptive' }]);
         await learningPathService.rebalance(user.id, courseId);
+        if (onModuleStatusChange) onModuleStatusChange();
       }
     } catch (e) {
       console.error('Failed to persist progress or rebalance:', e);

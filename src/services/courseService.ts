@@ -252,14 +252,47 @@ class CourseService {
   // Enrollment Management
   async enrollInCourse(userId: string, courseId: string) {
     try {
-      const { data, error } = await supabase
+      // Avoid double-enrollments
+      const { data: existing, error: existingErr } = await supabase
+        .from('course_enrollments')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('course_id', courseId)
+        .maybeSingle();
+
+      if (existingErr) {
+        console.warn('Error checking existing enrollment:', existingErr.message);
+      }
+
+      if (existing) return existing;
+
+      const { data: inserted, error: insertErr } = await supabase
         .from('course_enrollments')
         .insert([{ user_id: userId, course_id: courseId }])
         .select()
         .single();
 
-      if (error) throw new Error(`Failed to enroll in course: ${error.message}`);
-      return data;
+      if (insertErr) throw new Error(`Failed to enroll in course: ${insertErr.message}`);
+
+      // Increment enrollment_count on courses table
+      try {
+        const { error: updateErr } = await supabase
+          .from('courses')
+          .update({ enrollment_count: (inserted.enrollment_count ?? 0) + 1 })
+          .eq('id', courseId)
+          .select()
+          .single();
+        if (updateErr) {
+          // fallback: try to increment by fetching the course value and updating
+          const { data: courseRow } = await supabase.from('courses').select('enrollment_count').eq('id', courseId).maybeSingle();
+          const newCount = (courseRow?.enrollment_count ?? 0) + 1;
+          await supabase.from('courses').update({ enrollment_count: newCount }).eq('id', courseId);
+        }
+      } catch (e) {
+        console.warn('Failed to increment course enrollment_count (non-fatal):', e);
+      }
+
+      return inserted;
     } catch (error) {
       console.error('Enroll in course error:', error);
       throw error;
