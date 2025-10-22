@@ -185,7 +185,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             </p>
             <div className="flex justify-center md:justify-start gap-4">
               <a
-                href="http://localhost:9002"
+                href="https://cybergame.sparkstudio.co.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-5 py-3 rounded-xl font-semibold transition-transform transform hover:scale-105"
