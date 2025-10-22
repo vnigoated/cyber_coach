@@ -79,7 +79,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             </div>
             <div className="flex items-center space-x-4">
               <a
-                href="http://localhost:9002"
+                href="https://cybergame.sparkstudio.co.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors"
