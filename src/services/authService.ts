@@ -1,111 +1,136 @@
 import { supabase, testSupabaseConnection } from '../lib/supabase';
 import bcrypt from 'bcryptjs';
+import type { User } from '../types';
+
+type DBUser = {
+  id: string;
+  email: string;
+  name?: string | null;
+  role?: string;
+  password_hash?: string | null;
+  [key: string]: unknown;
+};
+
+function sanitizeUser(dbUser: DBUser): User {
+  const copy: Record<string, unknown> = { ...dbUser };
+  // remove password_hash if present
+  if ('password_hash' in copy) {
+    // remove password_hash property in a typed-safe way
+     
+    delete copy['password_hash'];
+  }
+  return copy as unknown as User;
+}
 
 class AuthService {
-  async login(credentials: { email: string; password: string; role: string }) {
+  async login(credentials: { email: string; password: string; role: string }): Promise<User | null> {
     try {
       // Proactively test connectivity for clearer errors (helps diagnose CORS/env issues)
       await testSupabaseConnection();
+      // Primary auth: use Supabase Auth (creates client session so RLS works)
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password
+      });
 
-      // Check if user exists with the specified role
-      const { data: user, error } = await supabase
+      if (signInError) {
+        // If supabase auth fails, fall back to legacy DB check (maintains compatibility)
+        console.warn('Supabase auth failed, attempting legacy DB fallback:', signInError.message);
+
+        const { data: user, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('email', credentials.email)
+          .eq('role', credentials.role)
+          .maybeSingle();
+
+        if (error) {
+          console.error('Login error:', error);
+          throw new Error(`Database error during login: ${error.message}`);
+        }
+
+        if (!user) throw new Error(`No ${credentials.role} account found with email: ${credentials.email}`);
+
+  const isValidPassword = await bcrypt.compare(credentials.password, (user as DBUser).password_hash ?? '');
+  if (!isValidPassword) throw new Error('Incorrect password. Please try again.');
+
+  const userCopy = sanitizeUser(user as DBUser);
+  localStorage.setItem('cyberSecUser', JSON.stringify(userCopy));
+  return userCopy;
+      }
+
+      // Fetch profile row for signed-in user
+      const sessionUser = signInData.user;
+      if (!sessionUser) throw new Error('Signed in but no user returned from Supabase Auth');
+
+      const { data: profile, error: profileError } = await supabase
         .from('users')
         .select('*')
-        .eq('email', credentials.email)
-        .eq('role', credentials.role)
+        .eq('email', sessionUser.email)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Login error:', error);
-        throw new Error(`Database error during login: ${error.message}`);
+      if (profileError) {
+        console.warn('Failed to fetch profile row after sign-in:', profileError.message);
       }
 
-      if (!user) {
-        throw new Error(`No ${credentials.role} account found with email: ${credentials.email}`);
-      }
-
-      // Verify password
-      const isValidPassword = await bcrypt.compare(credentials.password, user.password_hash);
-      
-      if (!isValidPassword) {
-        throw new Error('Incorrect password. Please try again.');
-      }
-
-    // Remove password from user object without creating unused locals
-    const userObj = user as Record<string, unknown>;
-    const userCopy: Record<string, unknown> = { ...userObj };
-    delete userCopy['password_hash'];
-
-    // Store user in localStorage
-    localStorage.setItem('cyberSecUser', JSON.stringify(userCopy));
-      
-    return userCopy as unknown;
+  const profileRow = profile ? (profile as DBUser) : undefined;
+  let profileCopy: User;
+  if (profileRow) {
+    profileCopy = sanitizeUser(profileRow);
+  } else {
+    profileCopy = { id: sessionUser.id, email: sessionUser.email, name: sessionUser.user_metadata?.full_name } as User;
+  }
+  // store to localStorage without password_hash
+  localStorage.setItem('cyberSecUser', JSON.stringify(profileCopy));
+  return profileCopy;
     } catch (error) {
       console.error('Login error:', error);
       throw error;
     }
   }
 
-  async register(userData: { email: string; password: string; name?: string; role: string; bio?: string; specialization?: string }) {
+  async register(userData: { email: string; password: string; name?: string; role: string; bio?: string; specialization?: string }): Promise<User | null> {
     try {
-      // Check if user already exists
-      const { data: existingUser, error: checkError } = await supabase
-        .from('users')
-        .select('email')
-        .eq('email', userData.email)
-        .maybeSingle();
+      // Create account with Supabase Auth first (creates session client-side)
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: userData.email,
+        password: userData.password,
+        options: { data: { full_name: userData.name } }
+      });
 
-      if (checkError && checkError.code !== 'PGRST116') {
-        console.error('Error checking existing user:', checkError);
-        throw new Error(`Failed to check existing user: ${checkError.message}`);
+      if (signUpError) {
+        console.error('Supabase signUp error:', signUpError);
+        throw signUpError;
       }
 
-      if (existingUser) {
-        throw new Error('User already exists with this email');
-      }
+      const authUser = signUpData.user;
+      // Insert profile row into users table if not exists
+      const profileRow = {
+        id: authUser?.id ?? undefined,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role,
+        level: 'beginner',
+        completed_assessment: userData.role === 'admin',
+        bio: userData.bio || '',
+        specialization: userData.specialization || '',
+        experience_years: userData.role === 'student' ? null : '0-1'
+      } as Record<string, unknown>;
 
-      // Hash password
-  const passwordHash = await bcrypt.hash(userData.password, 10);
-
-      // Generate a UUID for the new user
-  type MinimalCrypto = { randomUUID?: () => string } | undefined;
-  const globalCrypto = (typeof crypto !== 'undefined') ? (crypto as unknown as MinimalCrypto) : undefined;
-  const userId = globalCrypto && typeof globalCrypto.randomUUID === 'function' ? globalCrypto.randomUUID() : 'uid-' + Date.now();
-
-      // Create new user
       const { data: newUser, error } = await supabase
         .from('users')
-        .insert([
-          {
-            id: userId,
-            email: userData.email,
-            name: userData.name,
-            role: userData.role,
-            password_hash: passwordHash,
-            level: 'beginner',
-            completed_assessment: userData.role === 'admin',
-            bio: userData.bio || '',
-            specialization: userData.specialization || '',
-            experience_years: userData.role === 'student' ? null : '0-1'
-          }
-        ])
+        .upsert([profileRow])
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) {
-        console.error('Registration error:', error);
-        throw new Error(`Failed to create user: ${error.message}`);
+        console.error('Registration error while creating profile:', error);
+        throw error;
       }
 
-    // Remove password from user object without creating unused locals
-    const newUserObj = newUser as Record<string, unknown>;
-    const newUserCopy: Record<string, unknown> = { ...newUserObj };
-    delete newUserCopy['password_hash'];
-
-    // Store user in localStorage
-    localStorage.setItem('cyberSecUser', JSON.stringify(newUserCopy));
-      
-    return newUserCopy as unknown;
+  const newUserCopy = { ...(newUser || profileRow) } as unknown as User;
+  localStorage.setItem('cyberSecUser', JSON.stringify(newUserCopy));
+  return newUserCopy;
     } catch (error) {
       console.error('Registration error:', error);
       throw error;

@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { Award, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../context/AuthContext';
+import type { User } from '../../types';
 
 interface CertificateModalProps {
   isOpen: boolean;
@@ -19,38 +21,77 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   completionDate
 }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
+  const { user, updateUser } = useAuth();
 
   if (!isOpen) return null;
 
   const downloadCertificate = async () => {
-    if (certificateRef.current) {
-      const canvas = await html2canvas(certificateRef.current);
-      const image = canvas.toDataURL('image/png');
-      
-      // Save certificate to user's certificates
+    if (!certificateRef.current) return;
+
+    const canvas = await html2canvas(certificateRef.current);
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob((b) => resolve(b), 'image/png'));
+    if (!blob) {
+      console.error('Failed to generate certificate blob');
+      return;
+    }
+
+    const userId = user?.id ?? null;
+    if (!userId) {
+      console.warn('No authenticated user in context; certificate will not be saved to DB.');
+    } else {
+      const fileExt = 'png';
+  const sanitizedCourse = courseName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_-]/g, '');
+      const fileName = `${userId}_${sanitizedCourse}_${Date.now()}.${fileExt}`;
+      const filePath = `certificates/${fileName}`;
+
       try {
-        const result = await supabase.auth.getUser();
-        const user = (result && (result as any).data && (result as any).data.user) ? (result as any).data.user : null;
-        if (user && user.id) {
-          await supabase.from('user_certificates').insert({
-            user_id: user.id,
-            course_name: courseName,
-            issued_date: completionDate.toISOString(),
-            certificate_url: image
-          });
+        const { error: uploadError } = await supabase.storage.from('certificates').upload(filePath, blob, { contentType: 'image/png' });
+        if (uploadError) {
+          console.error('Failed to upload certificate to storage:', uploadError.message ?? uploadError);
         } else {
-          console.warn('No authenticated user found; certificate will not be saved to DB.');
+          const { data: publicData } = supabase.storage.from('certificates').getPublicUrl(filePath);
+          const publicUrl = publicData?.publicUrl ?? '';
+
+            try {
+            const { data: userRow, error: fetchErr } = await supabase.from('users').select('certificates').eq('id', userId).maybeSingle();
+            if (fetchErr) {
+              console.warn('Failed to fetch user row to append certificate:', fetchErr.message ?? fetchErr);
+            }
+            const existing = userRow?.certificates ?? [];
+            const newArr = Array.isArray(existing) ? [...existing, publicUrl] : [publicUrl];
+
+            const { error: updateErr } = await supabase.from('users').update({ certificates: newArr }).eq('id', userId);
+            if (updateErr) {
+              console.error('Failed to update user certificates array:', updateErr.message ?? updateErr);
+            } else {
+              // update local user object to include this certificate (so UI updates instantly)
+              if (updateUser) {
+                const patched: Partial<User> = { certificates: newArr };
+                try {
+                  updateUser(patched);
+                } catch (e) {
+                  // non-fatal, log briefly
+                  console.warn('updateUser call failed:', (e as Error).message ?? e);
+                }
+              }
+            }
+          } catch (e) {
+            console.error('Failed to append certificate to user row:', (e as Error).message ?? e);
+          }
         }
       } catch (error) {
-        console.error('Failed to save certificate:', error);
+        console.error('Failed to save/upload certificate:', (error as Error).message ?? error);
       }
-
-      // Download certificate
-      const link = document.createElement('a');
-      link.download = `${courseName.replace(/\s+/g, '_')}_Certificate.png`;
-      link.href = image;
-      link.click();
     }
+
+    // Download certificate locally as well
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = `${courseName.replace(/\s+/g, '_')}_Certificate.png`;
+    link.href = url;
+    link.click();
+    // free object URL
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
   };
 
   const formattedDate = completionDate.toLocaleDateString('en-US', {
@@ -68,22 +109,22 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               <Award className="h-16 w-16 text-cyan-600 mx-auto mb-6" />
               <h2 className="text-3xl font-bold text-gray-900 mb-2">Certificate of Completion</h2>
               <p className="text-gray-600 mb-8">This is to certify that</p>
-              
+
               <p className="text-2xl font-bold text-cyan-600 mb-6">{studentName}</p>
-              
+
               <p className="text-gray-600 mb-4">has successfully completed the course</p>
-              
+
               <p className="text-2xl font-bold text-gray-900 mb-8">{courseName}</p>
-              
+
               <p className="text-gray-600 mb-8">on {formattedDate}</p>
-              
+
               <div className="max-w-xs mx-auto border-t-2 border-gray-300 pt-4">
                 <p className="text-gray-500 text-sm">Course Instructor Signature</p>
               </div>
             </div>
           </div>
         </div>
-        
+
         <div className="bg-gray-50 px-6 py-4 rounded-b-lg flex justify-end space-x-4">
           <button
             onClick={onClose}

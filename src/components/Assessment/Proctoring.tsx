@@ -667,7 +667,7 @@ export const Proctoring: React.FC<Props> = ({
         rafRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   // UI — hidden in production; render nothing to keep UX seamless

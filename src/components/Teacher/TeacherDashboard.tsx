@@ -45,7 +45,7 @@ export const TeacherDashboard: React.FC = () => {
   const handleTogglePublish = async (course: Course) => {
     try {
       const updated = await courseService.updateCourse(course.id, {
-        is_published: !Boolean(course.is_published)
+        is_published: !course.is_published
       } as any);
       setCourses(courses.map(c => c.id === course.id ? updated : c));
     } catch (error) {

@@ -10,6 +10,20 @@ interface CourseDetailProps {
   onBack: () => void;
 }
 
+type ProgressRow = {
+  module_id?: string;
+  completed?: boolean | null;
+  quiz_score?: number | null;
+};
+
+type CourseModuleLike = Module & {
+  id: string;
+  testScore?: number | null;
+  videoUrl?: string | null;
+  labUrl?: string | null;
+  completed?: boolean;
+};
+
 export const CourseDetail: React.FC<CourseDetailProps> = ({ courseId, onBack }) => {
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
@@ -22,7 +36,33 @@ export const CourseDetail: React.FC<CourseDetailProps> = ({ courseId, onBack }) 
       setLoading(true);
       try {
         const data = await courseService.getCourseById(courseId);
-        if (mounted) setCourse(data);
+        // merge user progress if available
+        if (mounted && data) {
+          if (user?.id) {
+            try {
+              const progress = await courseService.getUserProgress(user.id, courseId) as ProgressRow[] | null;
+              const moduleProgress = (progress || []).reduce((acc: Record<string, ProgressRow>, p: ProgressRow) => {
+                if (p.module_id) acc[p.module_id] = p;
+                return acc;
+              }, {});
+
+              // normalize modules into course.course_modules for rendering
+              const modules = (data.course_modules ?? data.modules ?? []) as CourseModuleLike[];
+              const normalized = modules.map((m) => ({
+                ...m,
+                completed: !!moduleProgress[m.id]?.completed,
+                testScore: (moduleProgress[m.id]?.quiz_score ?? m.testScore) ?? undefined
+              }));
+
+              setCourse({ ...data, course_modules: normalized });
+            } catch (e) {
+              console.error('Failed to load user progress for course detail:', e);
+              setCourse(data);
+            }
+          } else {
+            setCourse(data);
+          }
+        }
       } catch (e) {
         console.error('Failed to load course:', e);
       } finally {
@@ -30,8 +70,56 @@ export const CourseDetail: React.FC<CourseDetailProps> = ({ courseId, onBack }) 
       }
     };
     load();
-    return () => { mounted = false; };
-  }, [courseId]);
+    // Listen for fallback navigation events from ModuleViewer
+    const onNavigate = (e: Event) => {
+      try {
+        const detail = (e as CustomEvent).detail;
+        if (detail?.moduleId) setSelectedModuleId(detail.moduleId);
+      } catch (err) {
+        // ignore malformed events but log for debugging
+         
+        console.warn('navigateModule event parsing failed', err);
+      }
+    };
+
+    window.addEventListener('navigateModule', onNavigate as EventListener);
+
+    // If URL contains ?module=ID set it
+    const params = new URLSearchParams(window.location.search);
+    const qModule = params.get('module');
+    if (qModule) setSelectedModuleId(qModule);
+
+    return () => { mounted = false; window.removeEventListener('navigateModule', onNavigate as EventListener); };
+  }, [courseId, user]);
+
+  // helper to refresh course data (used by ModuleViewer after progress changes)
+  const refreshCourse = async () => {
+    try {
+      const data = await courseService.getCourseById(courseId);
+      if (data) {
+        if (user?.id) {
+          const progress = await courseService.getUserProgress(user.id, courseId) as ProgressRow[] | null;
+          const moduleProgress = (progress || []).reduce((acc: Record<string, ProgressRow>, p: ProgressRow) => {
+            if (p.module_id) acc[p.module_id] = p;
+            return acc;
+          }, {});
+
+          const modules = (data.course_modules ?? data.modules ?? []) as CourseModuleLike[];
+          const normalized = modules.map((m) => ({
+            ...m,
+            completed: !!moduleProgress[m.id]?.completed,
+            testScore: (moduleProgress[m.id]?.quiz_score ?? m.testScore) ?? undefined
+          }));
+
+          setCourse({ ...data, course_modules: normalized });
+        } else {
+          setCourse(data);
+        }
+      }
+    } catch (e) {
+      console.error('Failed refreshing course:', e);
+    }
+  };
 
   if (loading) return <div className="p-6">Loading course...</div>;
   if (!course) {
@@ -44,6 +132,8 @@ export const CourseDetail: React.FC<CourseDetailProps> = ({ courseId, onBack }) 
         courseId={courseId}
         moduleId={selectedModuleId}
         onBack={() => setSelectedModuleId(null)}
+        onNavigateToModule={(id: string) => setSelectedModuleId(id)}
+        onModuleStatusChange={refreshCourse}
       />
     );
   }
