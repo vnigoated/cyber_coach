@@ -23,6 +23,7 @@ export const NotesTab: React.FC = () => {
 
   useEffect(() => {
     loadNotes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -78,19 +79,19 @@ export const NotesTab: React.FC = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-900 dark:bg-gray-900 light:bg-gray-50 min-h-screen">
+    <div className="p-6 bg-slate-900 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white dark:text-white light:text-gray-900">Study Notes</h1>
-            <p className="text-gray-300 dark:text-gray-300 light:text-gray-600">
+            <h1 className="text-3xl font-bold text-primary">Study Notes</h1>
+            <p className="text-muted">
               Access comprehensive PDF notes for all cybersecurity modules
             </p>
           </div>
           {isAdmin() && (
             <button
               onClick={() => setShowUploadForm(true)}
-              className="flex items-center space-x-2 bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors"
+              className="flex items-center space-x-2 btn-primary px-6 py-3 rounded-lg"
             >
               <Plus className="h-5 w-5" />
               <span>Upload Note</span>
@@ -99,25 +100,25 @@ export const NotesTab: React.FC = () => {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-card rounded-lg shadow p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search notes..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white light:border-gray-300 light:bg-white light:text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full pl-10 pr-4 py-2 border border-slate-700 bg-slate-700 text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
             
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
               <select
                 value={selectedCourse}
                 onChange={(e) => setSelectedCourse(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white light:border-gray-300 light:bg-white light:text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full pl-10 pr-4 py-2 border border-slate-700 bg-slate-700 text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
                 <option value="all">All Courses</option>
                 {courses.map(courseId => (
@@ -133,14 +134,14 @@ export const NotesTab: React.FC = () => {
         {/* Notes Grid */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4"></div>
-            <p className="text-gray-400 dark:text-gray-400 light:text-gray-600">Loading notes...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-4"></div>
+            <p className="text-muted">Loading notes...</p>
           </div>
         ) : filteredNotes.length === 0 ? (
           <div className="text-center py-12">
-            <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-white dark:text-white light:text-gray-900 mb-2">No notes found</h3>
-            <p className="text-gray-300 dark:text-gray-300 light:text-gray-600">
+            <FileText className="h-16 w-16 text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-primary mb-2">No notes found</h3>
+            <p className="text-muted">
               {searchTerm || selectedCourse !== 'all' 
                 ? 'Try adjusting your search criteria.' 
                 : 'Notes will appear here once they are uploaded by instructors.'}
@@ -149,24 +150,24 @@ export const NotesTab: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredNotes.map((note) => (
-              <div key={note.id} className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div key={note.id} className="bg-card rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
-                        <FileText className="h-5 w-5 text-orange-500" />
-                        <h3 className="font-bold text-white dark:text-white light:text-gray-900 line-clamp-1">
+                        <FileText className="h-5 w-5 text-amber-300" />
+                        <h3 className="font-bold text-primary line-clamp-1">
                           {note.title}
                         </h3>
                       </div>
-                      <p className="text-gray-300 dark:text-gray-300 light:text-gray-600 text-sm mb-3 line-clamp-2">
+                      <p className="text-muted text-sm mb-3 line-clamp-2">
                         {note.description}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm text-gray-400 dark:text-gray-400 light:text-gray-500 mb-4">
-                    <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
+                  <div className="flex items-center justify-between text-sm text-muted mb-4">
+                    <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs font-medium">
                       {note.course_id.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
                     </span>
                     <span>{new Date(note.created_at).toLocaleDateString()}</span>
@@ -174,7 +175,7 @@ export const NotesTab: React.FC = () => {
 
                   <button
                     onClick={() => handleDownload(note)}
-                    className="w-full flex items-center justify-center space-x-2 bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition-colors"
+                    className="w-full flex items-center justify-center space-x-2 btn-primary text-slate-900 py-2 rounded-lg hover:opacity-95 transition-colors"
                   >
                     <Download className="h-4 w-4" />
                     <span>Download PDF</span>
@@ -186,9 +187,9 @@ export const NotesTab: React.FC = () => {
         )}
 
         {/* Info Section */}
-        <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 light:bg-blue-50 border border-blue-200 dark:border-blue-800 light:border-blue-200 rounded-lg p-6">
-          <h3 className="font-bold text-blue-900 dark:text-blue-300 light:text-blue-900 mb-2">About Study Notes</h3>
-          <div className="text-blue-800 dark:text-blue-200 light:text-blue-800 space-y-2">
+        <div className="mt-8 bg-card border border-slate-700 rounded-lg p-6">
+          <h3 className="font-bold text-amber-300 mb-2">About Study Notes</h3>
+          <div className="text-muted space-y-2">
             <p>• Comprehensive PDF notes covering all course modules and topics</p>
             <p>• Created by expert instructors with real-world experience</p>
             <p>• Perfect for offline study and exam preparation</p>

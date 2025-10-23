@@ -6,11 +6,12 @@ interface ModuleInput {
   title: string;
   description: string;
   content: string;
+  id?: string;
 }
 
 type FormStep = 'details' | 'modules';
 
-import { Course } from '../../types';
+import { Course, Module } from '../../types';
 
 interface CourseCreationProps {
   onSuccess?: (course: Course) => void;
@@ -121,17 +122,18 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
         // Update existing modules and create new ones
           await Promise.all(modules.map((module, index) => {
           // If it's an existing module, update it
-          if ((module as any).id) {
-            return courseService.updateModule((module as any).id, {
-              ...module,
+          const mod = module as Partial<Module>;
+          if (mod.id) {
+            return courseService.updateModule(mod.id, {
+              ...mod,
               module_order: index + 1
             });
           }
           // Otherwise create a new module
           return courseService.createModule({
-            ...module,
+            ...mod,
             course_id: course.id,
-              module_order: index + 1
+            module_order: index + 1
           });
         }));
       } else {
@@ -164,8 +166,9 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
       setCurrentStep('details');
 
       onSuccess?.(savedCourse);
-    } catch (err: any) {
-      setError(err.message || 'Failed to create course');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message || 'Failed to create course');
     } finally {
       setIsLoading(false);
     }
@@ -178,38 +181,38 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-700">
+      <div className="bg-card rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-card">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">Create New Course</h2>
+          <h2 className="text-2xl font-bold text-primary">Create New Course</h2>
           <button
             onClick={onCancel}
-            className="text-slate-300 hover:text-white transition-colors text-lg font-medium"
+            className="text-muted hover:text-contrast transition-colors text-lg font-medium"
           >
             ✕
           </button>
         </div>
 
         {/* Step indicator */}
-        <div className="flex items-center mb-6 bg-slate-900/50 rounded-lg p-4">
+        <div className="flex items-center mb-6 bg-muted rounded-lg p-4">
           <div className="flex items-center flex-1">
             <div className={`rounded-full h-8 w-8 flex items-center justify-center ${
-              currentStep === 'details' ? 'bg-emerald-500 text-white' : 'bg-emerald-500/20 text-emerald-500'
+              currentStep === 'details' ? 'accent-emerald text-contrast' : 'bg-muted text-muted'
             }`}>
               1
             </div>
             <div className="ml-3">
-              <div className={`font-medium ${currentStep === 'details' ? 'text-white' : 'text-emerald-500'}`}>Course Details</div>
+              <div className={`font-medium ${currentStep === 'details' ? 'text-contrast' : 'text-muted'}`}>Course Details</div>
             </div>
           </div>
-          <div className="w-12 h-0.5 bg-slate-700"></div>
+          <div className="w-12 h-0.5 bg-card"></div>
           <div className="flex items-center flex-1">
             <div className={`rounded-full h-8 w-8 flex items-center justify-center ${
-              currentStep === 'modules' ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-400'
+              currentStep === 'modules' ? 'accent-emerald text-contrast' : 'bg-muted text-muted'
             }`}>
               2
             </div>
             <div className="ml-3">
-              <div className={`font-medium ${currentStep === 'modules' ? 'text-white' : 'text-slate-400'}`}>Course Modules</div>
+              <div className={`font-medium ${currentStep === 'modules' ? 'text-contrast' : 'text-muted'}`}>Course Modules</div>
             </div>
           </div>
         </div>
@@ -222,11 +225,11 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {currentStep === 'details' ? (
-            <div className="bg-slate-900/50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-white mb-4">Course Details</h3>
+            <div className="bg-muted p-6 rounded-lg">
+              <h3 className="text-lg font-semibold text-primary mb-4">Course Details</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label className="block text-sm font-medium text-muted">
                     Course Title
                   </label>
                   <input
@@ -234,13 +237,13 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
                     name="title"
                     value={courseData.title}
                     onChange={handleCourseInputChange}
-                    className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label className="block text-sm font-medium text-muted">
                     Description
                   </label>
                   <textarea
@@ -248,14 +251,14 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
                     value={courseData.description}
                     onChange={handleCourseInputChange}
                     rows={3}
-                    className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300">
+                    <label className="block text-sm font-medium text-muted">
                       Category
                     </label>
                     <input
@@ -263,20 +266,20 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
                       name="category"
                       value={courseData.category}
                       onChange={handleCourseInputChange}
-                      className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-300">
+                    <label className="block text-sm font-medium text-muted">
                       Difficulty
                     </label>
                     <select
                       name="difficulty"
                       value={courseData.difficulty}
                       onChange={handleCourseInputChange}
-                      className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                       required
                     >
                       <option value="beginner">Beginner</option>
@@ -286,7 +289,7 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-300">
+                    <label className="block text-sm font-medium text-muted">
                       Estimated Hours
                     </label>
                     <input
@@ -295,7 +298,7 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
                       value={courseData.estimated_hours}
                       onChange={handleCourseInputChange}
                       min="0"
-                      className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                       required
                     />
                   </div>
@@ -303,16 +306,16 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
               </div>
             </div>
           ) : (
-            <div className="bg-slate-900/50 p-6 rounded-lg">
+            <div className="bg-muted p-6 rounded-lg">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-primary">
                   Course Modules ({modules.length}/10)
                 </h3>
                 <button
                   type="button"
                   onClick={addModule}
                   disabled={modules.length >= 10}
-                  className="px-4 py-2.5 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2.5 btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -323,7 +326,7 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
 
               <div className="space-y-6">
                 {modules.map((module, index) => (
-                  <div key={index} className="p-4 border border-slate-700 rounded-lg bg-slate-800/50 relative">
+                  <div key={index} className="p-4 border border-card rounded-lg bg-card relative">
                     <div className="absolute top-4 right-4">
                       {modules.length > 1 && (
                         <button
@@ -336,46 +339,46 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onSuccess, onCancel, co
                       )}
                     </div>
 
-                    <h4 className="text-md font-medium text-white mb-4">
+                    <h4 className="text-md font-medium text-primary mb-4">
                       Module {index + 1}
                     </h4>
 
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-300">
+                        <label className="block text-sm font-medium text-muted">
                           Title
                         </label>
                         <input
                           type="text"
                           value={module.title}
                           onChange={(e) => handleModuleChange(index, 'title', e.target.value)}
-                          className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                          className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                           required
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-slate-300">
+                        <label className="block text-sm font-medium text-muted">
                           Description
                         </label>
                         <textarea
                           value={module.description}
                           onChange={(e) => handleModuleChange(index, 'description', e.target.value)}
                           rows={2}
-                          className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                          className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                           required
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-slate-300">
+                        <label className="block text-sm font-medium text-muted">
                           Content
                         </label>
                         <textarea
                           value={module.content}
                           onChange={(e) => handleModuleChange(index, 'content', e.target.value)}
                           rows={4}
-                          className="mt-1 block w-full rounded-md bg-slate-800 border-slate-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                          className="mt-1 block w-full rounded-md bg-card border-card text-contrast shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                           required
                         />
                       </div>

@@ -43,7 +43,7 @@ export const AssessmentTest: React.FC = () => {
     } else if (timeLeft === 0 && permissionGranted) {
       handleSubmitTest();
     }
-  }, [timeLeft, showResults, permissionGranted]);
+  }, [timeLeft, showResults, permissionGranted]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // block copy/paste/right-click during assessment
   useEffect(() => {
@@ -75,7 +75,7 @@ export const AssessmentTest: React.FC = () => {
       document.removeEventListener('paste', onCopyCutPaste);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [permissionGranted, showResults]);
+  }, [permissionGranted, showResults]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (videoRef.current && mediaStream) {

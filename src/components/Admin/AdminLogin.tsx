@@ -31,24 +31,22 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBack, onSuccess }) => 
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="max-w-lg w-full space-y-8 animate-fade-in">
+  <div className="min-h-screen bg-page flex items-center justify-center p-4">
+      <div className="max-w-lg w-full space-y-8">
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <div className="relative">
-              <Shield className="h-20 w-20 text-purple-500 animate-pulse" />
-              <div className="absolute inset-0 h-20 w-20 text-purple-500 animate-ping opacity-20">
-                <Shield className="h-full w-full" />
+              <Shield className="h-20 w-20 accent-emerald animate-pulse text-contrast" />
+              <div className="absolute inset-0 h-20 w-20 accent-emerald animate-ping opacity-20">
+                <Shield className="h-full w-full text-contrast" />
               </div>
             </div>
           </div>
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-3">
-            Admin Access
-          </h2>
-          <p className="text-xl text-slate-300">Secure administrative portal</p>
+          <h2 className="text-4xl font-bold text-primary mb-3">Admin Access</h2>
+          <p className="text-xl text-muted">Secure administrative portal</p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 space-y-6 border border-white/20">
+  <div className="bg-card rounded-3xl shadow-2xl p-8 space-y-6 border border-card">
           {onBack && (
             <button
               onClick={onBack}
@@ -67,13 +65,13 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBack, onSuccess }) => 
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex justify-center mb-6">
-              <div className="bg-purple-500/20 w-16 h-16 rounded-full flex items-center justify-center">
-                <Settings className="h-8 w-8 text-purple-400" />
+              <div className="bg-white/5 w-16 h-16 rounded-full flex items-center justify-center">
+                <Settings className="h-8 w-8 text-orange-400" />
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-200 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-muted mb-2">
                 Administrator Email
               </label>
               <input
@@ -82,13 +80,13 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBack, onSuccess }) => 
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-4 bg-slate-800/50 border border-slate-600 rounded-2xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                className="w-full px-4 py-4 bg-card border-card rounded-2xl text-contrast placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all duration-300"
                 placeholder="Enter administrator email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-200 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-muted mb-2">
                 Password
               </label>
               <div className="relative">
@@ -98,7 +96,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBack, onSuccess }) => 
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-4 pr-12 bg-slate-800/50 border border-slate-600 rounded-2xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-4 pr-12 bg-card border-card rounded-2xl text-contrast placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all duration-300"
                   placeholder="Enter your password"
                 />
                 <button
@@ -118,11 +116,11 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBack, onSuccess }) => 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full py-4 px-6 btn-primary rounded-2xl shadow transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-contrast"></div>
                   <span>Authenticating...</span>
                 </div>
               ) : (
@@ -131,12 +129,12 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onBack, onSuccess }) => 
             </button>
           </form>
 
-          <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4">
-            <div className="flex items-center text-purple-300 mb-2">
-              <Shield className="h-5 w-5 mr-2" />
-              <span className="font-medium">Security Notice</span>
+          <div className="bg-muted border border-card rounded-xl p-4">
+            <div className="flex items-center text-muted mb-2">
+              <Shield className="h-5 w-5 mr-2 accent-amber" />
+              <span className="font-medium text-primary">Security Notice</span>
             </div>
-            <p className="text-slate-300 text-sm">
+            <p className="text-muted text-sm">
               Admin access is restricted to authorized personnel only. All login attempts are monitored and logged.
             </p>
           </div>

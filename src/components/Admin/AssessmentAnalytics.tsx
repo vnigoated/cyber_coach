@@ -15,6 +15,7 @@ export const AssessmentAnalytics: React.FC = () => {
 
   useEffect(() => {
     loadAssessmentData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export const AssessmentAnalytics: React.FC = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadAssessmentData = async () => {
     try {
@@ -113,95 +114,93 @@ export const AssessmentAnalytics: React.FC = () => {
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 4) return 'text-green-600 bg-green-100';
-    if (confidence >= 3) return 'text-blue-600 bg-blue-100';
-    if (confidence >= 2) return 'text-yellow-600 bg-yellow-100';
-    return 'text-red-600 bg-red-100';
+    if (confidence >= 4) return 'badge-strong-emerald';
+    if (confidence >= 3) return 'badge-emerald';
+    if (confidence >= 2) return 'badge-amber';
+    return 'badge-danger';
   };
 
   const getDifficultyColor = (difficulty: number) => {
-    if (difficulty >= 4) return 'text-red-600 bg-red-100';
-    if (difficulty >= 3) return 'text-orange-600 bg-orange-100';
-    if (difficulty >= 2) return 'text-yellow-600 bg-yellow-100';
-    return 'text-green-600 bg-green-100';
+    if (difficulty >= 4) return 'badge-danger';
+    if (difficulty >= 3) return 'badge-amber';
+    if (difficulty >= 2) return 'badge-warning';
+    return 'badge-emerald';
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      <div className="min-h-screen bg-page flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+    <div className="min-h-screen bg-page p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2">
-            Assessment Analytics
-          </h1>
-          <p className="text-slate-300">Analyze student performance and confidence levels</p>
+          <h1 className="text-4xl font-bold text-primary mb-2">Assessment Analytics</h1>
+          <p className="text-muted">Analyze student performance and confidence levels</p>
         </div>
 
         {/* Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-300 text-sm font-medium">Total Responses</p>
-                <p className="text-3xl font-bold text-white">{responses.length}</p>
+                <p className="text-muted text-sm font-medium">Total Responses</p>
+                <p className="text-3xl font-bold text-primary">{responses.length}</p>
               </div>
-              <BarChart3 className="h-12 w-12 text-blue-400" />
+              <BarChart3 className="h-12 w-12 accent-emerald" />
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-green-500/20 to-green-600/20 backdrop-blur-sm border border-green-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-300 text-sm font-medium">Avg Accuracy</p>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-muted text-sm font-medium">Avg Accuracy</p>
+                <p className="text-3xl font-bold text-primary">
                   {responses.length > 0 ? Math.round((responses.filter(r => r.is_correct).length / responses.length) * 100) : 0}%
                 </p>
               </div>
-              <CheckCircle className="h-12 w-12 text-green-400" />
+              <CheckCircle className="h-12 w-12 accent-emerald" />
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-300 text-sm font-medium">Avg Confidence</p>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-muted text-sm font-medium">Avg Confidence</p>
+                <p className="text-3xl font-bold text-primary">
                   {responses.length > 0 ? (responses.reduce((sum, r) => sum + r.confidence_level, 0) / responses.length).toFixed(1) : '0.0'}
                 </p>
               </div>
-              <TrendingUp className="h-12 w-12 text-purple-400" />
+              <TrendingUp className="h-12 w-12 accent-amber" />
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm border border-orange-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-300 text-sm font-medium">Unique Students</p>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-muted text-sm font-medium">Unique Students</p>
+                <p className="text-3xl font-bold text-primary">
                   {new Set(responses.map(r => r.user_id)).size}
                 </p>
               </div>
-              <Users className="h-12 w-12 text-orange-400" />
+              <Users className="h-12 w-12 accent-amber" />
             </div>
           </div>
         </div>
 
         {/* Question Analytics */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6">Question Performance Analysis</h2>
+        <div className="bg-muted border border-card rounded-2xl p-6 mb-8">
+          <h2 className="text-2xl font-bold text-primary mb-6">Question Performance Analysis</h2>
           
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-700">
+                <tr className="border-b border-card">
                   <th className="text-left py-3 px-4 text-slate-300 font-medium">Question</th>
                   <th className="text-left py-3 px-4 text-slate-300 font-medium">Responses</th>
                   <th className="text-left py-3 px-4 text-slate-300 font-medium">Accuracy</th>
@@ -212,15 +211,15 @@ export const AssessmentAnalytics: React.FC = () => {
               </thead>
               <tbody>
                 {questionAnalytics.map((question) => (
-                  <tr key={question.question_id} className="border-b border-slate-700/50 hover:bg-slate-700/20">
+                  <tr key={question.question_id} className="border-b border-card/50 hover:bg-card">
                     <td className="py-4 px-4">
                       <div className="text-white font-medium">Question {question.question_id}</div>
                       <div className="text-slate-400 text-sm">{question.question_text}</div>
                     </td>
-                    <td className="py-4 px-4 text-white">{question.total_responses}</td>
+                    <td className="py-4 px-4 text-primary">{question.total_responses}</td>
                     <td className="py-4 px-4">
                       <div className="flex items-center space-x-2">
-                        <span className="text-white">
+                        <span className="text-primary">
                           {Math.round((question.correct_responses / question.total_responses) * 100)}%
                         </span>
                         {question.correct_responses / question.total_responses >= 0.7 ? (
@@ -243,7 +242,7 @@ export const AssessmentAnalytics: React.FC = () => {
                     <td className="py-4 px-4">
                       <button
                         onClick={() => console.log('View details for', question.question_id)}
-                        className="text-blue-400 hover:text-blue-300 transition-colors"
+                        className="text-primary hover:text-muted transition-colors"
                       >
                         View Details
                       </button>
@@ -256,21 +255,21 @@ export const AssessmentAnalytics: React.FC = () => {
         </div>
 
         {/* Recent Responses */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Recent Student Responses</h2>
+        <div className="bg-muted border border-card rounded-2xl p-6">
+          <h2 className="text-2xl font-bold text-primary mb-6">Recent Student Responses</h2>
           
           <div className="space-y-4">
             {responses.slice(0, 10).map((response) => (
-              <div key={response.id} className="bg-slate-700/30 rounded-xl p-4 border border-slate-600/30">
+              <div key={response.id} className="bg-card rounded-xl p-4 border border-card">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <div className="text-white font-medium">{response.user?.name || 'Unknown User'}</div>
-                      <div className="text-slate-400 text-sm">{response.user?.email}</div>
+                      <div className="text-primary font-medium">{response.user?.name || 'Unknown User'}</div>
+                      <div className="text-muted text-sm">{response.user?.email}</div>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        response.user?.level === 'advanced' ? 'bg-red-500/20 text-red-400' :
-                        response.user?.level === 'intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-green-500/20 text-green-400'
+                        response.user?.level === 'advanced' ? 'badge-danger' :
+                        response.user?.level === 'intermediate' ? 'badge-amber' :
+                        'badge-emerald'
                       }`}>
                         {response.user?.level}
                       </span>
@@ -286,9 +285,9 @@ export const AssessmentAnalytics: React.FC = () => {
                       Confidence: {response.confidence_level}/5
                     </span>
                     {response.is_correct ? (
-                      <CheckCircle className="h-5 w-5 text-green-400" />
+                      <CheckCircle className="h-5 w-5 accent-emerald" />
                     ) : (
-                      <XCircle className="h-5 w-5 text-red-400" />
+                      <XCircle className="h-5 w-5 accent-amber" />
                     )}
                   </div>
                 </div>

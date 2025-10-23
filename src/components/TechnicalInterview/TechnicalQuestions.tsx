@@ -136,21 +136,21 @@ export const TechnicalQuestions: React.FC = () => {
 
   if (selectedQuestion) {
     return (
-      <div className="p-6 bg-gray-900 dark:bg-gray-900 light:bg-gray-50 min-h-screen">
+      <div className="p-6 bg-page min-h-screen">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <button
               onClick={() => setSelectedQuestion(null)}
-              className="flex items-center space-x-2 text-gray-400 hover:text-white dark:text-gray-400 dark:hover:text-white light:text-gray-600 light:hover:text-gray-900 transition-colors"
+              className="flex items-center space-x-2 text-muted hover:text-primary transition-colors"
             >
               <span>← Back to Questions</span>
             </button>
             
             {timeLeft !== null && (
-              <div className="flex items-center space-x-2 text-lg font-medium">
-                <Clock className="h-5 w-5 text-orange-500" />
-                <span className={timeLeft < 300 ? 'text-red-400' : 'text-white dark:text-white light:text-gray-900'}>
+                <div className="flex items-center space-x-2 text-lg font-medium">
+                <Clock className="h-5 w-5 text-accent" />
+                <span className={timeLeft < 300 ? 'text-accent' : 'text-contrast'}>
                   {formatTime(timeLeft)}
                 </span>
               </div>
@@ -158,13 +158,13 @@ export const TechnicalQuestions: React.FC = () => {
           </div>
 
           {/* Question Info */}
-          <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="bg-card rounded-lg shadow-md p-6 mb-6">
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4">
                 <div className="text-3xl">{getCompanyLogo(selectedQuestion.company)}</div>
                 <div>
-                  <h1 className="text-2xl font-bold text-white dark:text-white light:text-gray-900">{selectedQuestion.company}</h1>
-                  <p className="text-gray-300 dark:text-gray-300 light:text-gray-600">{selectedQuestion.position}</p>
+                  <h1 className="text-2xl font-bold text-primary">{selectedQuestion.company}</h1>
+                  <p className="text-muted">{selectedQuestion.position}</p>
                 </div>
               </div>
               
@@ -172,7 +172,7 @@ export const TechnicalQuestions: React.FC = () => {
                 <span className={`px-3 py-1 rounded-full border text-sm font-medium ${getDifficultyColor(selectedQuestion.difficulty)}`}>
                   {selectedQuestion.difficulty.toUpperCase()}
                 </span>
-                <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+                <span className="px-3 py-1 rounded-full text-sm font-medium bg-muted text-accent">
                   {selectedQuestion.category}
                 </span>
               </div>
@@ -203,30 +203,30 @@ export const TechnicalQuestions: React.FC = () => {
             {/* Question and Answer Area */}
             <div className="lg:col-span-2 space-y-6">
               {/* Question */}
-              <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-bold text-white dark:text-white light:text-gray-900 mb-4">Question</h2>
-                <div className="prose max-w-none text-gray-300 dark:text-gray-300 light:text-gray-700">
-                  <pre className="whitespace-pre-wrap font-sans">{selectedQuestion.question}</pre>
+                <div className="bg-card rounded-lg shadow-md p-6">
+                  <h2 className="text-xl font-bold text-primary mb-4">Question</h2>
+                  <div className="prose max-w-none text-muted">
+                    <pre className="whitespace-pre-wrap font-sans">{selectedQuestion.question}</pre>
+                  </div>
                 </div>
-              </div>
 
               {/* User Answer Area */}
-              <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-bold text-white dark:text-white light:text-gray-900 mb-4">Your Solution</h3>
+              <div className="bg-card rounded-lg shadow-md p-6">
+                <h3 className="text-lg font-bold text-primary mb-4">Your Solution</h3>
                 <textarea
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   placeholder="Write your solution here..."
-                  className="w-full h-64 p-4 border border-gray-600 dark:border-gray-600 light:border-gray-300 rounded-lg bg-gray-900 dark:bg-gray-900 light:bg-white text-white dark:text-white light:text-gray-900 font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full h-64 p-4 border border-card rounded-lg bg-card text-contrast font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
                 
                 <div className="flex items-center justify-between mt-4">
-                  <div className="text-sm text-gray-400 dark:text-gray-400 light:text-gray-500">
+                  <div className="text-sm text-muted">
                     {userAnswer.length} characters
                   </div>
                   <button
                     onClick={() => setShowSolution(!showSolution)}
-                    className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                    className="flex items-center space-x-2 btn-primary btn-primary-rounded"
                   >
                     {showSolution ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     <span>{showSolution ? 'Hide Solution' : 'Show Solution'}</span>
@@ -236,21 +236,21 @@ export const TechnicalQuestions: React.FC = () => {
 
               {/* Solution */}
               {showSolution && (
-                <div className="bg-green-50 dark:bg-green-900/20 light:bg-green-50 border border-green-200 dark:border-green-800 light:border-green-200 rounded-lg p-6">
-                  <h3 className="text-lg font-bold text-green-800 dark:text-green-300 light:text-green-800 mb-4">Official Solution</h3>
-                  <div className="prose max-w-none text-green-700 dark:text-green-200 light:text-green-700">
+                <div className="bg-card border border-card rounded-lg p-6">
+                  <h3 className="text-lg font-bold text-primary mb-4">Official Solution</h3>
+                  <div className="prose max-w-none text-muted">
                     <div dangerouslySetInnerHTML={{ 
                       __html: selectedQuestion.solution
                         .replace(/\n/g, '<br/>')
-                        .replace(/```([^`]+)```/g, '<pre class="bg-gray-800 text-green-300 p-4 rounded mt-4 mb-4 overflow-x-auto"><code>$1</code></pre>')
-                        .replace(/`([^`]+)`/g, '<code class="bg-gray-800 text-green-300 px-1 rounded">$1</code>')
+                        .replace(/```([^`]+)```/g, '<pre class="bg-card text-accent p-4 rounded mt-4 mb-4 overflow-x-auto"><code>$1</code></pre>')
+                        .replace(/`([^`]+)`/g, '<code class="bg-card text-accent px-1 rounded">$1</code>')
                         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
                     }} />
                   </div>
                   
-                  <div className="mt-6 p-4 bg-green-100 dark:bg-green-800/30 light:bg-green-100 rounded-lg">
-                    <h4 className="font-bold text-green-800 dark:text-green-300 light:text-green-800 mb-2">Explanation</h4>
-                    <p className="text-green-700 dark:text-green-200 light:text-green-700">{selectedQuestion.explanation}</p>
+                  <div className="mt-6 p-4 bg-muted rounded-lg">
+                    <h4 className="font-bold text-primary mb-2">Explanation</h4>
+                    <p className="text-muted">{selectedQuestion.explanation}</p>
                   </div>
 
                   {selectedQuestion.followUpQuestions && (
@@ -270,21 +270,21 @@ export const TechnicalQuestions: React.FC = () => {
             {/* Hints Sidebar */}
             <div className="space-y-6">
               {/* Camera & Mic Preview */}
-              <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
+              <div className="bg-card rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-white dark:text-white light:text-gray-900">Camera & Microphone</h3>
+                  <h3 className="text-lg font-bold text-primary">Camera & Microphone</h3>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={startMedia}
                       disabled={isRequestingMedia || !!mediaStream}
-                      className={`px-3 py-1 rounded-lg text-sm ${mediaStream ? 'bg-gray-600 text-white cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                      className={`px-3 py-1 rounded-lg text-sm ${mediaStream ? 'bg-muted text-contrast cursor-not-allowed' : 'btn-primary'}`}
                     >
                       {isRequestingMedia ? 'Starting…' : mediaStream ? 'Active' : 'Start'}
                     </button>
                     <button
                       onClick={stopMedia}
                       disabled={!mediaStream}
-                      className={`px-3 py-1 rounded-lg text-sm ${mediaStream ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gray-600 text-white cursor-not-allowed'}`}
+                      className={`px-3 py-1 rounded-lg text-sm ${mediaStream ? 'btn-cta' : 'bg-muted text-contrast cursor-not-allowed'}`}
                     >
                       Stop
                     </button>
@@ -292,12 +292,12 @@ export const TechnicalQuestions: React.FC = () => {
                 </div>
 
                 {mediaError && (
-                  <div className="mb-3 text-sm text-red-400">
+                  <div className="mb-3 text-sm text-accent">
                     {mediaError}. Please allow camera and microphone permissions in your browser and ensure no other app is using them.
                   </div>
                 )}
 
-                <div className="aspect-video bg-black rounded-lg overflow-hidden border border-gray-700 flex items-center justify-center">
+                <div className="aspect-video bg-card rounded-lg overflow-hidden border border-card flex items-center justify-center">
                   <video
                     ref={videoRef}
                     autoPlay
@@ -305,17 +305,17 @@ export const TechnicalQuestions: React.FC = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <p className="mt-2 text-xs text-gray-400 dark:text-gray-400 light:text-gray-500">
+                <p className="mt-2 text-xs text-muted">
                   Preview shows your camera. Microphone is enabled for realism; audio is not recorded.
                 </p>
               </div>
               {/* Hints */}
-              <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
+              <div className="bg-card rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-white dark:text-white light:text-gray-900">Hints</h3>
+                  <h3 className="text-lg font-bold text-primary">Hints</h3>
                   <button
                     onClick={() => setShowHints(!showHints)}
-                    className="text-orange-500 hover:text-orange-600 transition-colors"
+                    className="text-accent hover:opacity-90 transition-colors"
                   >
                     <Lightbulb className="h-5 w-5" />
                   </button>
@@ -324,10 +324,10 @@ export const TechnicalQuestions: React.FC = () => {
                 {showHints ? (
                   <div className="space-y-3">
                     {selectedQuestion.hints.slice(0, currentHintIndex + 1).map((hint, index) => (
-                      <div key={index} className="p-3 bg-yellow-50 dark:bg-yellow-900/20 light:bg-yellow-50 border border-yellow-200 dark:border-yellow-800 light:border-yellow-200 rounded-lg">
+                      <div key={index} className="p-3 bg-muted border border-card rounded-lg">
                         <div className="flex items-start space-x-2">
-                          <Lightbulb className="h-4 w-4 text-yellow-600 dark:text-yellow-400 light:text-yellow-600 mt-0.5" />
-                          <p className="text-yellow-800 dark:text-yellow-200 light:text-yellow-800 text-sm">{hint}</p>
+                          <Lightbulb className="h-4 w-4 text-accent mt-0.5" />
+                          <p className="text-muted text-sm">{hint}</p>
                         </div>
                       </div>
                     ))}
@@ -335,7 +335,7 @@ export const TechnicalQuestions: React.FC = () => {
                     {currentHintIndex < selectedQuestion.hints.length - 1 && (
                       <button
                         onClick={handleShowNextHint}
-                        className="w-full bg-yellow-600 text-white py-2 rounded-lg hover:bg-yellow-700 transition-colors text-sm"
+                        className="w-full btn-primary py-2 rounded-lg text-sm"
                       >
                         Show Next Hint ({currentHintIndex + 2}/{selectedQuestion.hints.length})
                       </button>
@@ -349,44 +349,44 @@ export const TechnicalQuestions: React.FC = () => {
               </div>
 
               {/* Progress */}
-              <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-bold text-white dark:text-white light:text-gray-900 mb-4">Progress</h3>
+              <div className="bg-card rounded-lg shadow-md p-6">
+                <h3 className="text-lg font-bold text-primary mb-4">Progress</h3>
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
                     {userAnswer.length > 0 ? (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-5 w-5 text-accent" />
                     ) : (
-                      <div className="h-5 w-5 border-2 border-gray-400 rounded-full"></div>
+                      <div className="h-5 w-5 border-2 border-card rounded-full"></div>
                     )}
-                    <span className="text-gray-300 dark:text-gray-300 light:text-gray-700">Started writing solution</span>
+                    <span className="text-muted">Started writing solution</span>
                   </div>
                   
                   <div className="flex items-center space-x-2">
                     {showHints ? (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-5 w-5 text-accent" />
                     ) : (
-                      <div className="h-5 w-5 border-2 border-gray-400 rounded-full"></div>
+                      <div className="h-5 w-5 border-2 border-card rounded-full"></div>
                     )}
-                    <span className="text-gray-300 dark:text-gray-300 light:text-gray-700">Used hints</span>
+                    <span className="text-muted">Used hints</span>
                   </div>
                   
                   <div className="flex items-center space-x-2">
                     {showSolution ? (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-5 w-5 text-accent" />
                     ) : (
-                      <div className="h-5 w-5 border-2 border-gray-400 rounded-full"></div>
+                      <div className="h-5 w-5 border-2 border-card rounded-full"></div>
                     )}
-                    <span className="text-gray-300 dark:text-gray-300 light:text-gray-700">Viewed solution</span>
+                    <span className="text-muted">Viewed solution</span>
                   </div>
                 </div>
               </div>
 
               {/* Tags */}
-              <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-bold text-white dark:text-white light:text-gray-900 mb-4">Related Topics</h3>
+              <div className="bg-card rounded-lg shadow-md p-6">
+                <h3 className="text-lg font-bold text-primary mb-4">Related Topics</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedQuestion.tags.map((tag, index) => (
-                    <span key={index} className="bg-gray-700 dark:bg-gray-700 light:bg-gray-200 text-gray-300 dark:text-gray-300 light:text-gray-700 px-2 py-1 rounded text-sm">
+                    <span key={index} className="bg-muted text-muted px-2 py-1 rounded text-sm">
                       {tag}
                     </span>
                   ))}
@@ -410,14 +410,14 @@ export const TechnicalQuestions: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-card rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-white dark:text-white light:text-gray-700 mb-2">Company</label>
+              <label className="block text-sm font-medium text-primary mb-2">Company</label>
               <select
                 value={filterCompany}
                 onChange={(e) => setFilterCompany(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-600 dark:border-gray-600 light:border-gray-300 rounded-lg bg-gray-900 dark:bg-gray-900 light:bg-white text-white dark:text-white light:text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-card rounded-lg bg-muted text-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
                 <option value="all">All Companies</option>
                 {companies.map(company => (
@@ -427,11 +427,11 @@ export const TechnicalQuestions: React.FC = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-white dark:text-white light:text-gray-700 mb-2">Difficulty</label>
+              <label className="block text-sm font-medium text-primary mb-2">Difficulty</label>
               <select
                 value={filterDifficulty}
                 onChange={(e) => setFilterDifficulty(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-600 dark:border-gray-600 light:border-gray-300 rounded-lg bg-gray-900 dark:bg-gray-900 light:bg-white text-white dark:text-white light:text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-card rounded-lg bg-muted text-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
                 <option value="all">All Levels</option>
                 {difficulties.map(difficulty => (
@@ -443,11 +443,11 @@ export const TechnicalQuestions: React.FC = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-white dark:text-white light:text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-primary mb-2">Category</label>
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-600 dark:border-gray-600 light:border-gray-300 rounded-lg bg-gray-900 dark:bg-gray-900 light:bg-white text-white dark:text-white light:text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-card rounded-lg bg-muted text-primary focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
                 <option value="all">All Categories</option>
                 {categories.map(category => (
@@ -464,14 +464,14 @@ export const TechnicalQuestions: React.FC = () => {
             <div
               key={question.id}
               onClick={() => handleQuestionSelect(question)}
-              className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-orange-500"
+              className="bg-card rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow border-accent"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-4">
                   <div className="text-2xl">{getCompanyLogo(question.company)}</div>
                   <div>
-                    <h3 className="text-xl font-bold text-white dark:text-white light:text-gray-900">{question.company}</h3>
-                    <p className="text-gray-300 dark:text-gray-300 light:text-gray-600">{question.position}</p>
+                    <h3 className="text-xl font-bold text-primary">{question.company}</h3>
+                    <p className="text-muted">{question.position}</p>
                   </div>
                 </div>
                 
@@ -479,31 +479,31 @@ export const TechnicalQuestions: React.FC = () => {
                   <span className={`px-3 py-1 rounded-full border text-sm font-medium ${getDifficultyColor(question.difficulty)}`}>
                     {question.difficulty.toUpperCase()}
                   </span>
-                  <ChevronRight className="h-5 w-5 text-gray-400 dark:text-gray-400 light:text-gray-400" />
+                  <ChevronRight className="h-5 w-5 text-muted" />
                 </div>
               </div>
 
               <div className="mb-4">
-                <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium mr-3">
+                <span className="px-3 py-1 rounded-full text-sm font-medium mr-3 bg-muted text-accent">
                   {question.category}
                 </span>
-                <span className="text-gray-400 dark:text-gray-400 light:text-gray-500 text-sm">
+                <span className="text-muted text-sm">
                   {question.timeLimit} minutes
                 </span>
               </div>
 
-              <p className="text-gray-300 dark:text-gray-300 light:text-gray-700 mb-4 line-clamp-3">
+              <p className="text-muted mb-4 line-clamp-3">
                 {question.question.substring(0, 200)}...
               </p>
 
               <div className="flex flex-wrap gap-2">
                 {question.tags.slice(0, 4).map((tag, index) => (
-                  <span key={index} className="bg-gray-700 dark:bg-gray-700 light:bg-gray-200 text-gray-300 dark:text-gray-300 light:text-gray-700 px-2 py-1 rounded text-xs">
+                  <span key={index} className="bg-muted text-muted px-2 py-1 rounded text-xs">
                     {tag}
                   </span>
                 ))}
                 {question.tags.length > 4 && (
-                  <span className="text-gray-400 dark:text-gray-400 light:text-gray-500 text-xs">
+                  <span className="text-muted text-xs">
                     +{question.tags.length - 4} more
                   </span>
                 )}

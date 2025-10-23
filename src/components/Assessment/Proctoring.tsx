@@ -119,6 +119,7 @@ export const Proctoring: React.FC<Props> = ({
       document.removeEventListener('visibilitychange', onVisibilityChange);
       window.removeEventListener('blur', onBlur);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Load OpenCV.js robustly (refactored so it can be retried)
@@ -234,6 +235,7 @@ export const Proctoring: React.FC<Props> = ({
       }
     }, 300);
     return () => clearInterval(iv);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, opencvUrl, modelsPath]);
 
   // Initialize native FaceDetector + face-api.js
@@ -382,7 +384,7 @@ export const Proctoring: React.FC<Props> = ({
     return () => {
       try {
         if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-      } catch {}
+      } catch (e) { console.debug('overlay removal error', e); }
     };
   }, []);
 

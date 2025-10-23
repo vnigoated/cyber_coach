@@ -19,10 +19,10 @@ export const Dashboard: React.FC = () => {
       value: user?.completedAssessment ? '85%' : 'Not Taken',
       color: 'bg-green-500'
     },
-    {
+      {
       icon: Trophy,
       label: 'Certificates Earned',
-      value: user?.certificates.length || '0',
+      value: (user?.certificates?.length ?? 0) || '0',
       color: 'bg-yellow-500'
     },
     {
@@ -41,14 +41,14 @@ export const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 space-y-8 bg-gray-900 dark:bg-gray-900 light:bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-8 bg-slate-900 min-h-screen">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white dark:text-white light:text-gray-900">Welcome back, {user?.name}!</h1>
-          <p className="text-gray-300 dark:text-gray-300 light:text-gray-600 mt-2">Continue your cybersecurity learning journey</p>
+          <h1 className="text-3xl font-bold text-primary">Welcome back, {user?.name}!</h1>
+          <p className="text-muted mt-2">Continue your cybersecurity learning journey</p>
         </div>
-        <div className="flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-2 rounded-lg">
-          <Shield className="h-5 w-5" />
+        <div className="flex items-center space-x-2 bg-card text-primary px-4 py-2 rounded-lg border border-slate-700">
+          <Shield className="h-5 w-5 text-accent" />
           <span className="font-medium">Level: {user?.level}</span>
         </div>
       </div>
@@ -58,14 +58,14 @@ export const Dashboard: React.FC = () => {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+            <div key={index} className="bg-card rounded-lg shadow p-6 border-l-4 border-amber-500">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-300 dark:text-gray-300 light:text-gray-600 text-sm">{stat.label}</p>
-                  <p className="text-2xl font-bold text-white dark:text-white light:text-gray-900 mt-1">{stat.value}</p>
+                  <p className="text-muted text-sm">{stat.label}</p>
+                  <p className="text-2xl font-bold text-primary mt-1">{stat.value}</p>
                 </div>
-                <div className={`${stat.color} p-3 rounded-lg`}>
-                  <Icon className="h-6 w-6 text-white" />
+                <div className={`p-3 rounded-lg bg-slate-700`}> 
+                  <Icon className="h-6 w-6 text-accent" />
                 </div>
               </div>
             </div>
@@ -74,56 +74,56 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Progress Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Current Progress */}
-        <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-white dark:text-white light:text-gray-900 mb-4">Current Progress</h2>
+        <div className="bg-card rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold text-primary mb-4">Current Progress</h2>
           <div className="space-y-4">
             <div>
-              <div className="flex justify-between text-sm text-gray-300 dark:text-gray-300 light:text-gray-600 mb-1">
+              <div className="flex justify-between text-sm text-muted mb-1">
                 <span>OWASP Top 10 Course</span>
                 <span>3/10 modules</span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 light:bg-gray-200 rounded-full h-2">
-                <div className="bg-orange-600 h-2 rounded-full" style={{ width: '30%' }}></div>
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="bg-amber-600 h-2 rounded-full" style={{ width: '30%' }}></div>
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-sm text-gray-300 dark:text-gray-300 light:text-gray-600 mb-1">
+              <div className="flex justify-between text-sm text-muted mb-1">
                 <span>Live Security Labs</span>
                 <span>2/6 completed</span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 light:bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{ width: '33%' }}></div>
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="bg-emerald-600 h-2 rounded-full" style={{ width: '33%' }}></div>
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-sm text-gray-300 dark:text-gray-300 light:text-gray-600 mb-1">
+              <div className="flex justify-between text-sm text-muted mb-1">
                 <span>Skill Assessment</span>
                 <span>{user?.completedAssessment ? 'Completed' : 'Pending'}</span>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 light:bg-gray-200 rounded-full h-2">
-                <div className="bg-yellow-600 h-2 rounded-full" style={{ width: user?.completedAssessment ? '100%' : '0%' }}></div>
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="bg-amber-600 h-2 rounded-full" style={{ width: user?.completedAssessment ? '100%' : '0%' }}></div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-white dark:text-white light:text-gray-900 mb-4">Recent Activity</h2>
+        <div className="bg-card rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold text-primary mb-4">Recent Activity</h2>
           <div className="space-y-4">
             {recentActivity.map((activity, index) => (
               <div key={index} className="flex items-start space-x-3">
-                <div className={`w-2 h-2 rounded-full mt-2 ${
-                  activity.type === 'completion' ? 'bg-green-500' :
-                  activity.type === 'start' ? 'bg-blue-500' :
-                  activity.type === 'achievement' ? 'bg-purple-500' :
-                  'bg-yellow-500'
-                }`}></div>
+                  <div className={`w-2 h-2 rounded-full mt-2 ${
+                    activity.type === 'completion' ? 'bg-green-500' :
+                    activity.type === 'start' ? 'bg-blue-500' :
+                    activity.type === 'achievement' ? 'bg-slate-500' :
+                    'bg-amber-500'
+                  }`}></div>
                 <div className="flex-1">
-                  <p className="text-sm text-white dark:text-white light:text-gray-900">{activity.action}</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-400 light:text-gray-500">{activity.time}</p>
+                  <p className="text-sm text-primary">{activity.action}</p>
+                  <p className="text-xs text-muted">{activity.time}</p>
                 </div>
               </div>
             ))}
@@ -132,18 +132,18 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white dark:bg-gray-800 light:bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-white dark:text-white light:text-gray-900 mb-4">Quick Actions</h2>
+      <div className="bg-card rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold text-primary mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-red-600 text-white p-4 rounded-lg hover:from-orange-600 hover:to-red-700 transition-all">
+          <button className="flex items-center justify-center space-x-2 btn-primary text-slate-900 p-4 rounded-lg">
             <Target className="h-5 w-5" />
             <span>Take Assessment</span>
           </button>
-          <button className="flex items-center justify-center space-x-2 bg-gradient-to-r from-gray-700 to-gray-800 text-white p-4 rounded-lg hover:from-gray-800 hover:to-gray-900 transition-all">
+          <button className="flex items-center justify-center space-x-2 bg-slate-800 text-primary p-4 rounded-lg">
             <BookOpen className="h-5 w-5" />
             <span>Continue Course</span>
           </button>
-          <button className="flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-600 to-orange-700 text-white p-4 rounded-lg hover:from-orange-700 hover:to-orange-800 transition-all">
+          <button className="flex items-center justify-center space-x-2 btn-primary text-slate-900 p-4 rounded-lg">
             <TrendingUp className="h-5 w-5" />
             <span>View Progress</span>
           </button>
@@ -152,7 +152,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Live Stream Section */}
       <div>
-        <h2 className="text-2xl font-bold text-white dark:text-white light:text-gray-900 mb-6">Live Training Sessions</h2>
+        <h2 className="text-2xl font-bold text-primary mb-6">Live Training Sessions</h2>
         <LiveStream
           streamId="live-owasp-session"
           title="Live OWASP Top 10 Deep Dive"

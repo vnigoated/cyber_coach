@@ -49,8 +49,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full space-y-8 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full space-y-8">
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <div className="relative">
@@ -66,7 +66,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           <p className="text-xl text-slate-300">Start your cybersecurity journey today</p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 space-y-6 border border-white/20">
+  <div className="bg-white/5 backdrop-blur rounded-2xl p-8 space-y-6 border border-white/10">
           {onBack && (
             <button
               onClick={onBack}

@@ -97,25 +97,23 @@ export const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      <div className="min-h-screen bg-page flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+    <div className="min-h-screen bg-page p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2">
-            Admin Dashboard
-          </h1>
-          <p className="text-slate-300">Manage users, courses, and platform analytics</p>
+          <h1 className="text-4xl font-bold text-primary mb-2">Admin Dashboard</h1>
+          <p className="text-muted">Manage users, courses, and platform analytics</p>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex space-x-1 mb-8 bg-slate-800/50 p-1 rounded-2xl backdrop-blur-sm border border-slate-700">
+  <div className="flex space-x-1 mb-8 bg-muted p-1 rounded-2xl border border-card">
           {([
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'users', label: 'Users', icon: Users },
@@ -129,8 +127,8 @@ export const AdminDashboard = () => {
                 onClick={() => setActiveView(tab.id)}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-xl transition-all duration-200 ${
                   activeView === tab.id
-                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                    ? 'btn-primary shadow-lg'
+                    : 'text-muted hover:text-contrast hover:bg-muted'
                 }`}
               >
                 <Icon className="h-5 w-5" />
@@ -145,67 +143,67 @@ export const AdminDashboard = () => {
           <div className="space-y-8">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-6">
+              <div className="bg-card border border-card rounded-2xl p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-blue-300 text-sm font-medium">Total Students</p>
-                    <p className="text-3xl font-bold text-white">{stats?.users?.students || 0}</p>
+                    <p className="text-muted text-sm font-medium">Total Students</p>
+                    <p className="text-3xl font-bold text-primary">{stats?.users?.students || 0}</p>
                   </div>
-                  <GraduationCap className="h-12 w-12 text-blue-400" />
+                  <GraduationCap className="h-12 w-12 accent-emerald" />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-green-500/20 to-green-600/20 backdrop-blur-sm border border-green-500/30 rounded-2xl p-6">
+              <div className="bg-card border border-card rounded-2xl p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-green-300 text-sm font-medium">Total Teachers</p>
-                    <p className="text-3xl font-bold text-white">{stats?.users?.teachers || 0}</p>
+                    <p className="text-muted text-sm font-medium">Total Teachers</p>
+                    <p className="text-3xl font-bold text-primary">{stats?.users?.teachers || 0}</p>
                   </div>
-                  <Users className="h-12 w-12 text-green-400" />
+                  <Users className="h-12 w-12 accent-emerald" />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6">
+              <div className="bg-card border border-card rounded-2xl p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-purple-300 text-sm font-medium">Published Courses</p>
-                    <p className="text-3xl font-bold text-white">{stats?.courses?.published || 0}</p>
+                    <p className="text-muted text-sm font-medium">Published Courses</p>
+                    <p className="text-3xl font-bold text-primary">{stats?.courses?.published || 0}</p>
                   </div>
-                  <BookOpen className="h-12 w-12 text-purple-400" />
+                  <BookOpen className="h-12 w-12 accent-amber" />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm border border-orange-500/30 rounded-2xl p-6">
+              <div className="bg-card border border-card rounded-2xl p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-orange-300 text-sm font-medium">Total Enrollments</p>
-                    <p className="text-3xl font-bold text-white">{stats?.enrollments?.total || 0}</p>
+                    <p className="text-muted text-sm font-medium">Total Enrollments</p>
+                    <p className="text-3xl font-bold text-primary">{stats?.enrollments?.total || 0}</p>
                   </div>
-                  <TrendingUp className="h-12 w-12 text-orange-400" />
+                  <TrendingUp className="h-12 w-12 accent-amber" />
                 </div>
               </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Recent Activity</h2>
+            <div className="bg-muted border border-card rounded-2xl p-6">
+              <h2 className="text-2xl font-bold text-primary mb-6">Recent Activity</h2>
               <div className="space-y-4">
                 {users.slice(0, 5).map((user) => (
-                  <div key={user.id} className="flex items-center space-x-4 p-4 bg-slate-700/30 rounded-xl">
+                  <div key={user.id} className="flex items-center space-x-4 p-4 bg-card rounded-xl">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      user.role === 'admin' ? 'bg-purple-500/20 text-purple-400' :
-                      user.role === 'teacher' ? 'bg-green-500/20 text-green-400' :
-                      'bg-blue-500/20 text-blue-400'
+                      user.role === 'admin' ? 'bg-amber-900/10 text-amber-400' :
+                      user.role === 'teacher' ? 'bg-emerald-900/10 text-emerald-400' :
+                      'bg-slate-700/10 text-slate-300'
                     }`}>
-                      {user.role === 'admin' ? <Crown className="h-5 w-5" /> :
-                       user.role === 'teacher' ? <Users className="h-5 w-5" /> :
-                       <GraduationCap className="h-5 w-5" />}
+                      {user.role === 'admin' ? <Crown className="h-5 w-5 accent-amber" /> :
+                       user.role === 'teacher' ? <Users className="h-5 w-5 accent-emerald" /> :
+                       <GraduationCap className="h-5 w-5 accent-emerald"/>}
                     </div>
                     <div className="flex-1">
-                      <p className="text-white font-medium">{user.name}</p>
-                      <p className="text-slate-400 text-sm">Joined as {user.role}</p>
+                      <p className="text-primary font-medium">{user.name}</p>
+                      <p className="text-muted text-sm">Joined as {user.role}</p>
                     </div>
-                    <div className="text-slate-400 text-sm">
+                    <div className="text-muted text-sm">
                       {new Date(user.created_at ?? Date.now()).toLocaleDateString()}
                     </div>
                   </div>
@@ -236,23 +234,23 @@ export const AdminDashboard = () => {
                       <td className="py-4 px-4">
                         <div className="flex items-center space-x-3">
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                            user.role === 'admin' ? 'bg-purple-500/20 text-purple-400' :
-                            user.role === 'teacher' ? 'bg-green-500/20 text-green-400' :
-                            'bg-blue-500/20 text-blue-400'
+                            user.role === 'admin' ? 'bg-amber-900/10 text-amber-400' :
+                            user.role === 'teacher' ? 'bg-emerald-900/10 text-emerald-400' :
+                            'bg-slate-700/10 text-slate-300'
                           }`}>
-                            {user.name.charAt(0).toUpperCase()}
+                            {(user?.name ?? 'U').charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <p className="text-white font-medium">{user.name}</p>
-                            <p className="text-slate-400 text-sm">{user.email}</p>
+                            <p className="text-primary font-medium">{user?.name ?? 'Unknown'}</p>
+                            <p className="text-muted text-sm">{user?.email ?? ''}</p>
                           </div>
                         </div>
                       </td>
                       <td className="py-4 px-4">
                         <select
-                          value={user.role}
-                          onChange={(e) => handleRoleChange(user.id, e.target.value as Role)}
-                          className="bg-slate-700 text-white rounded-lg px-3 py-1 text-sm border border-slate-600"
+                          value={user.role ?? 'student'}
+                          onChange={(e) => handleRoleChange(user.id as string, e.target.value as Role)}
+                          className="bg-card text-contrast rounded-lg px-3 py-1 text-sm border border-card"
                         >
                           <option value="student">Student</option>
                           <option value="teacher">Teacher</option>

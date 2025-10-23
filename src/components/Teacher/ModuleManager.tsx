@@ -22,8 +22,9 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({ courseId }) => {
   const loadModules = async () => {
     try {
       const moduleData = await courseService.getModulesByCourse(courseId);
-      setModules(moduleData);
+      setModules(moduleData || []);
     } catch (err) {
+      console.error('Failed to load modules', err);
       setError('Failed to load modules');
     }
   };
@@ -37,28 +38,29 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({ courseId }) => {
       }
 
       await courseService.createModule({
-        ...newModule,
+        ...(newModule as Partial<Module>),
         course_id: courseId
       });
 
       setNewModule({ title: '', description: '', content: '' });
       loadModules();
       setError('');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message);
     }
   };
 
   return (
-    <div className="space-y-4 p-4 bg-white rounded-lg shadow">
+    <div className="space-y-4 p-4 bg-card rounded-lg shadow">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg font-semibold text-primary">
           Course Modules ({modules.length}/10)
         </h3>
       </div>
       
       {error && (
-        <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        <div className="p-3 bg-red-900/50 border border-red-500 text-red-200 rounded">
           {error}
         </div>
       )}
@@ -68,15 +70,15 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({ courseId }) => {
         {modules.map((module, index) => (
           <div 
             key={module.id} 
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+            className="p-4 border border-card rounded-lg bg-muted transition-colors"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <span className="text-gray-500">#{index + 1}</span>
-                <h4 className="font-medium text-gray-900">{module.title}</h4>
+                <span className="text-muted">#{index + 1}</span>
+                <h4 className="font-medium text-primary">{module.title}</h4>
               </div>
             </div>
-            <p className="mt-2 text-sm text-gray-600">{module.description}</p>
+            <p className="mt-2 text-sm text-muted">{module.description}</p>
           </div>
         ))}
       </div>
@@ -85,14 +87,14 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({ courseId }) => {
       {modules.length < 10 && (
         <form onSubmit={handleAddModule} className="space-y-4 border-t pt-4 mt-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-muted mb-1">
               Module Title
             </label>
             <input
               type="text"
               value={newModule.title}
               onChange={(e) => setNewModule({...newModule, title: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-card rounded-md bg-card text-contrast focus:outline-none focus:ring-2 focus:ring-amber-500"
               required
             />
           </div>
@@ -125,7 +127,7 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({ courseId }) => {
 
           <button
             type="submit"
-            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            className="w-full sm:w-auto px-4 py-2 btn-primary rounded-md transition-colors"
           >
             Add Module
           </button>

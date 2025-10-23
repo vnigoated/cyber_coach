@@ -56,8 +56,8 @@ export const Certificates: React.FC = () => {
     <div className="p-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Certificates</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-primary mb-4">Certificates</h1>
+          <p className="text-muted">
             Earn industry-recognized certificates by completing courses and demonstrating your cybersecurity skills
           </p>
         </div>
@@ -65,29 +65,59 @@ export const Certificates: React.FC = () => {
         {/* Earned Certificates */}
         {earnedCertificates.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Certificates</h2>
+            <h2 className="text-2xl font-bold text-slate-100 mb-6">Your Certificates</h2>
             <div className="grid gap-6">
-              {earnedCertificates.map((certificateId) => {
-                const certificate = availableCertificates.find(c => c.id === certificateId);
-                if (!certificate) return null;
-                
+              {earnedCertificates.map((certificateEntry: string, idx: number) => {
+                // Support either stored certificate IDs (matching availableCertificates[].id)
+                // or public URLs (uploaded certificate image links). If it's a URL, render a generic earned card with download link.
+                const isUrl = typeof certificateEntry === 'string' && (certificateEntry.startsWith('http://') || certificateEntry.startsWith('https://'));
+                const certificate = !isUrl ? availableCertificates.find(c => c.id === certificateEntry) : null;
+
+                if (!isUrl && !certificate) return null;
+
+                if (isUrl) {
+                  return (
+                    <div key={`url-${idx}`} className="bg-card border border-card rounded-lg p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className="accent-amber p-3 rounded-lg">
+                            <Award className="h-8 w-8 text-contrast" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-primary">Certificate</h3>
+                            <p className="text-muted">Digital certificate issued by the platform</p>
+                            <div className="flex items-center space-x-2 mt-2 text-sm text-low">
+                              <Calendar className="h-4 w-4" />
+                              <span>Issued recently</span>
+                            </div>
+                          </div>
+                        </div>
+                        <a href={certificateEntry} target="_blank" rel="noreferrer" className="flex items-center space-x-2 btn-primary btn-primary-rounded">
+                          <Download className="h-4 w-4" />
+                          <span>Download</span>
+                        </a>
+                      </div>
+                    </div>
+                  );
+                }
+
                 return (
-                  <div key={certificate.id} className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
+                  <div key={certificate!.id} className="bg-card border border-card rounded-lg p-6">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="bg-green-100 p-3 rounded-lg">
-                          <Award className="h-8 w-8 text-green-600" />
+                        <div className="accent-emerald p-3 rounded-lg">
+                          <Award className="h-8 w-8 text-contrast" />
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold text-green-800">{certificate.title}</h3>
-                          <p className="text-green-700">{certificate.description}</p>
-                          <div className="flex items-center space-x-2 mt-2 text-sm text-green-600">
+                          <h3 className="text-xl font-bold text-primary">{certificate!.title}</h3>
+                          <p className="text-muted">{certificate!.description}</p>
+                          <div className="flex items-center space-x-2 mt-2 text-sm text-low">
                             <Calendar className="h-4 w-4" />
                             <span>Earned on March 15, 2024</span>
                           </div>
                         </div>
                       </div>
-                      <button className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                      <button className="flex items-center space-x-2 btn-cta btn-primary-rounded">
                         <Download className="h-4 w-4" />
                         <span>Download</span>
                       </button>
@@ -101,27 +131,27 @@ export const Certificates: React.FC = () => {
 
         {/* Available Certificates */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Certificates</h2>
+          <h2 className="text-2xl font-bold text-slate-100 mb-6">Available Certificates</h2>
           <div className="grid gap-6">
             {availableCertificates.map((certificate) => {
-              const isEarned = earnedCertificates.includes(certificate.id);
+              const isEarned = earnedCertificates.includes(certificate.id) || earnedCertificates.some((e: string) => typeof e === 'string' && e.includes(certificate.id));
               
               return (
-                <div key={certificate.id} className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+                <div key={certificate.id} className="bg-card rounded-lg shadow border border-card overflow-hidden">
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-4">
-                        <div className={`p-3 rounded-lg ${isEarned ? 'bg-green-100' : 'bg-gray-100'}`}>
-                          <Award className={`h-8 w-8 ${isEarned ? 'text-green-600' : 'text-gray-400'}`} />
+                        <div className={`p-3 rounded-lg ${isEarned ? 'accent-emerald' : 'bg-muted'}`}>
+                          <Award className={`h-8 w-8 ${isEarned ? 'text-contrast' : 'text-muted'}`} />
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
-                            <h3 className="text-xl font-bold text-gray-900">{certificate.title}</h3>
-                            {isEarned && <CheckCircle className="h-5 w-5 text-green-500" />}
+                            <h3 className="text-xl font-bold text-primary">{certificate.title}</h3>
+                            {isEarned && <CheckCircle className="h-5 w-5 text-contrast" />}
                           </div>
-                          <p className="text-gray-600 mb-4">{certificate.description}</p>
+                          <p className="text-muted mb-4">{certificate.description}</p>
                           
-                          <div className="flex items-center space-x-6 text-sm text-gray-500 mb-4">
+                          <div className="flex items-center space-x-6 text-sm text-low mb-4">
                             <div className="flex items-center space-x-1">
                               <Star className="h-4 w-4" />
                               <span>Professional Level</span>
@@ -136,8 +166,8 @@ export const Certificates: React.FC = () => {
                       
                       {!isEarned && (
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-cyan-600">{certificate.progress}%</div>
-                          <div className="text-gray-600 text-sm">Complete</div>
+                          <div className="text-2xl font-bold text-accent">{certificate.progress}%</div>
+                          <div className="text-low text-sm">Complete</div>
                         </div>
                       )}
                     </div>
@@ -145,13 +175,13 @@ export const Certificates: React.FC = () => {
                     {/* Progress Bar */}
                     {!isEarned && (
                       <div className="mb-4">
-                        <div className="flex justify-between text-sm text-gray-600 mb-1">
+                        <div className="flex justify-between text-sm text-low mb-1">
                           <span>Progress</span>
                           <span>{certificate.progress}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-muted rounded-full h-2">
                           <div 
-                            className="bg-cyan-600 h-2 rounded-full transition-all duration-300"
+                            className="accent-amber h-2 rounded-full transition-all duration-300"
                             style={{ width: `${certificate.progress}%` }}
                           ></div>
                         </div>
@@ -159,13 +189,13 @@ export const Certificates: React.FC = () => {
                     )}
 
                     {/* Requirements */}
-                    <div className="border-t pt-4">
-                      <h4 className="font-medium text-gray-900 mb-3">Requirements</h4>
+                    <div className="border-t border-card pt-4">
+                      <h4 className="font-medium text-primary mb-3">Requirements</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {certificate.requirements.map((requirement, index) => (
                           <div key={index} className="flex items-center space-x-2 text-sm">
-                            <div className="h-2 w-2 bg-gray-300 rounded-full"></div>
-                            <span className="text-gray-700">{requirement}</span>
+                            <div className="h-2 w-2 bg-muted rounded-full"></div>
+                            <span className="text-muted">{requirement}</span>
                           </div>
                         ))}
                       </div>
@@ -174,12 +204,12 @@ export const Certificates: React.FC = () => {
                     {/* Action Button */}
                     <div className="mt-6">
                       {isEarned ? (
-                        <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
+                        <button className="w-full btn-cta py-3 rounded-lg transition-colors flex items-center justify-center space-x-2">
                           <Download className="h-4 w-4" />
                           <span>Download Certificate</span>
                         </button>
                       ) : (
-                        <button className="w-full bg-cyan-600 text-white py-3 rounded-lg hover:bg-cyan-700 transition-colors">
+                        <button className="w-full btn-primary py-3 rounded-lg">
                           Continue Learning
                         </button>
                       )}
@@ -192,9 +222,9 @@ export const Certificates: React.FC = () => {
         </div>
 
         {/* Certificate Info */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="font-bold text-blue-900 mb-2">About Our Certificates</h3>
-          <div className="text-blue-800 space-y-2">
+        <div className="mt-8 bg-slate-800 border border-slate-700 rounded-lg p-6">
+          <h3 className="font-bold text-slate-100 mb-2">About Our Certificates</h3>
+          <div className="text-slate-300 space-y-2">
             <p>• Industry-recognized certificates that validate your cybersecurity skills</p>
             <p>• Digital certificates with verification codes for employer validation</p>
             <p>• Continuing education credits for professional development</p>

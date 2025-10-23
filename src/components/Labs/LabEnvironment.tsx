@@ -19,6 +19,7 @@ export const LabEnvironment: React.FC<LabEnvironmentProps> = ({ labId, labTitle,
   // Initialize lab environment
   useEffect(() => {
     initializeLab();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [labId]);
 
   // Auto-scroll terminal

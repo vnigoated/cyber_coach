@@ -102,39 +102,39 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full">
+      <div className="bg-card rounded-lg shadow-xl max-w-4xl w-full">
         <div className="p-6">
-          <div ref={certificateRef} className="bg-gradient-to-br from-cyan-50 to-blue-50 p-12 rounded-lg border-8 border-double border-cyan-200">
+          <div ref={certificateRef} className="p-12 rounded-lg code-bg border-8 border-double border-slate-700">
             <div className="text-center">
-              <Award className="h-16 w-16 text-cyan-600 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Certificate of Completion</h2>
-              <p className="text-gray-600 mb-8">This is to certify that</p>
+              <Award className="h-16 w-16 text-accent mx-auto mb-6" />
+              <h2 className="text-3xl font-bold text-primary mb-2">Certificate of Completion</h2>
+              <p className="text-muted mb-8">This is to certify that</p>
 
-              <p className="text-2xl font-bold text-cyan-600 mb-6">{studentName}</p>
+              <p className="text-2xl font-bold text-accent mb-6">{studentName}</p>
 
-              <p className="text-gray-600 mb-4">has successfully completed the course</p>
+              <p className="text-muted mb-4">has successfully completed the course</p>
 
-              <p className="text-2xl font-bold text-gray-900 mb-8">{courseName}</p>
+              <p className="text-2xl font-bold text-primary mb-8">{courseName}</p>
 
-              <p className="text-gray-600 mb-8">on {formattedDate}</p>
+              <p className="text-muted mb-8">on {formattedDate}</p>
 
-              <div className="max-w-xs mx-auto border-t-2 border-gray-300 pt-4">
-                <p className="text-gray-500 text-sm">Course Instructor Signature</p>
+              <div className="max-w-xs mx-auto border-t-2 border-slate-700 pt-4">
+                <p className="text-muted text-sm">Course Instructor Signature</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-gray-50 px-6 py-4 rounded-b-lg flex justify-end space-x-4">
+        <div className="bg-card px-6 py-4 rounded-b-lg flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-4 py-2 text-muted hover:text-primary transition-colors"
           >
             Close
           </button>
           <button
             onClick={downloadCertificate}
-            className="bg-cyan-600 text-white px-6 py-2 rounded-lg hover:bg-cyan-700 transition-colors flex items-center space-x-2"
+            className="btn-primary px-6 py-2 rounded-lg transition-colors flex items-center space-x-2"
           >
             <Download className="h-4 w-4" />
             <span>Download Certificate</span>

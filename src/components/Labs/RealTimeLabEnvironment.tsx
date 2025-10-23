@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Terminal, RotateCcw, ExternalLink, CheckCircle, AlertTriangle, Shield, Zap, Target } from 'lucide-react';
 
 interface LabEnvironmentProps {
@@ -312,22 +313,22 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
   const allObjectivesCompleted = objectives.every((obj: LabObjective) => obj.completed);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-page text-primary">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4">
+  <div className="bg-card border-b border-card p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
               onClick={onBack}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-muted hover:text-primary transition-colors"
             >
               ← Back to Lab
             </button>
             <h1 className="text-xl font-bold">{labTitle} - Real-Time Environment</h1>
             <div className={`px-3 py-1 rounded-full text-sm flex items-center space-x-1 ${
-              labStatus === 'running' ? 'bg-green-900 text-green-300' :
-              labStatus === 'starting' ? 'bg-yellow-900 text-yellow-300' :
-              'bg-gray-700 text-gray-300'
+              labStatus === 'running' ? 'bg-emerald-900 text-emerald-300' :
+              labStatus === 'starting' ? 'bg-amber-900 text-amber-300' :
+              'bg-card text-muted'
             }`}>
               <Zap className="h-4 w-4" />
               <span>{labStatus.toUpperCase()}</span>
@@ -337,7 +338,7 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
           <div className="flex items-center space-x-2">
             <button
               onClick={() => initializeLab()}
-              className="flex items-center space-x-1 px-3 py-2 bg-yellow-600 hover:bg-yellow-700 rounded transition-colors"
+              className="flex items-center space-x-1 px-3 py-2 btn-primary rounded transition-colors"
             >
               <RotateCcw className="h-4 w-4" />
               <span>Reset</span>
@@ -348,27 +349,27 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
 
       <div className="flex h-screen">
         {/* Left Sidebar - Objectives & Tools */}
-        <div className="w-80 bg-gray-800 border-r border-gray-700 p-4 overflow-y-auto">
+  <div className="w-80 bg-card border-r border-card p-4 overflow-y-auto">
           {/* Objectives */}
           <div className="mb-6">
-            <h2 className="text-lg font-bold mb-4 flex items-center">
-              <Target className="h-5 w-5 mr-2 text-orange-500" />
+              <h2 className="text-lg font-bold mb-4 flex items-center">
+              <Target className="h-5 w-5 mr-2 accent-amber" />
               Lab Objectives
             </h2>
             <div className="space-y-3">
               {objectives.map((objective: LabObjective) => (
                 <div key={objective.id} className={`p-3 rounded-lg border ${
                   objective.completed 
-                    ? 'border-green-600 bg-green-900/20' 
-                    : 'border-gray-600 bg-gray-700/50'
+          ? 'border-green-600 bg-emerald-900/20' 
+          : 'border-card bg-card/50'
                 }`}>
                   <div className="flex items-start space-x-2">
                     {objective.completed ? (
-                      <CheckCircle className="h-5 w-5 text-green-400 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 accent-emerald mt-0.5" />
                     ) : (
-                      <div className="h-5 w-5 border-2 border-gray-500 rounded-full mt-0.5"></div>
+                      <div className="h-5 w-5 border-2 border-card rounded-full mt-0.5"></div>
                     )}
-                    <span className={`text-sm ${objective.completed ? 'text-green-300' : 'text-gray-300'}`}>
+                    <span className={`text-sm ${objective.completed ? 'text-emerald-300' : 'text-muted'}`}>
                       {objective.description}
                     </span>
                   </div>
@@ -380,31 +381,31 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
           {/* Quick Attack Tools */}
           <div className="mb-6">
             <h3 className="text-md font-bold mb-3 flex items-center">
-              <Shield className="h-4 w-4 mr-2 text-red-500" />
+              <Shield className="h-4 w-4 mr-2 accent-amber" />
               Quick Attacks
             </h3>
             <div className="space-y-2">
               <button
                 onClick={() => executeAttack('sql-injection', "' OR 1=1--")}
-                className="w-full text-left px-3 py-2 bg-red-700/30 hover:bg-red-600/30 rounded transition-colors text-sm border border-red-600/30"
+                className="w-full text-left px-3 py-2 bg-card/30 hover:bg-card/40 rounded transition-colors text-sm border border-card/30"
               >
                 💉 SQL Injection
               </button>
               <button
                 onClick={() => executeAttack('idor', '/user/1337')}
-                className="w-full text-left px-3 py-2 bg-orange-700/30 hover:bg-orange-600/30 rounded transition-colors text-sm border border-orange-600/30"
+                className="w-full text-left px-3 py-2 bg-card/30 hover:bg-card/40 rounded transition-colors text-sm border border-card/30"
               >
                 🔓 IDOR Attack
               </button>
               <button
                 onClick={() => executeAttack('xss', '<script>alert(1)</script>')}
-                className="w-full text-left px-3 py-2 bg-yellow-700/30 hover:bg-yellow-600/30 rounded transition-colors text-sm border border-yellow-600/30"
+                className="w-full text-left px-3 py-2 bg-card/30 hover:bg-card/40 rounded transition-colors text-sm border border-card/30"
               >
                 ⚡ XSS Injection
               </button>
               <button
                 onClick={() => executeAttack('privilege-escalation', 'admin=true')}
-                className="w-full text-left px-3 py-2 bg-purple-700/30 hover:bg-purple-600/30 rounded transition-colors text-sm border border-purple-600/30"
+                className="w-full text-left px-3 py-2 bg-card/30 hover:bg-card/40 rounded transition-colors text-sm border border-card/30"
               >
                 👑 Privilege Escalation
               </button>
@@ -418,18 +419,18 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
               {attackResults.slice(0, 5).map((result: AttackResult) => (
                 <div key={result.id} className={`p-2 rounded text-xs border ${
                   result.success 
-                    ? 'border-green-600 bg-green-900/20 text-green-300' 
-                    : 'border-red-600 bg-red-900/20 text-red-300'
+                    ? 'border-emerald-600 bg-emerald-900/20 text-emerald-300' 
+                    : 'border-card bg-card/20 text-muted'
                 }`}>
                   <div className="flex items-center space-x-1 mb-1">
                     {result.success ? (
-                      <CheckCircle className="h-3 w-3" />
+                      <CheckCircle className="h-3 w-3 accent-emerald" />
                     ) : (
-                      <AlertTriangle className="h-3 w-3" />
+                      <AlertTriangle className="h-3 w-3 accent-amber" />
                     )}
                     <span className="font-medium">{result.attack}</span>
                   </div>
-                  <div className="text-gray-400 truncate">{result.response}</div>
+                  <div className="text-muted truncate">{result.response}</div>
                 </div>
               ))}
             </div>
@@ -455,8 +456,8 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
           {/* Target Application */}
-          <div className="h-1/2 border-b border-gray-700">
-            <div className="bg-gray-800 px-4 py-2 border-b border-gray-700 flex items-center justify-between">
+          <div className="h-1/2 border-b border-card">
+            <div className="bg-card px-4 py-2 border-b border-card flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <ExternalLink className="h-4 w-4" />
                 <span className="font-medium">Target: {selectedApp?.name || 'No target selected'}</span>
@@ -565,7 +566,7 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
 
           {/* Terminal */}
           <div className="h-1/2 flex flex-col">
-            <div className="bg-gray-800 px-4 py-2 border-b border-gray-700 flex items-center space-x-2">
+            <div className="bg-card px-4 py-2 border-b border-card flex items-center space-x-2">
               <Terminal className="h-4 w-4" />
               <span className="font-medium">Attack Terminal</span>
             </div>
@@ -574,7 +575,7 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
               className="flex-1 bg-black p-4 font-mono text-sm overflow-y-auto"
             >
               {terminalOutput.map((line, index) => (
-                <div key={index} className="text-green-400 whitespace-pre-wrap">
+                <div key={index} className="accent-emerald whitespace-pre-wrap">
                   {line}
                 </div>
               ))}
@@ -586,7 +587,7 @@ export const RealTimeLabEnvironment = ({ labId, labTitle, onComplete, onBack }: 
                     value={currentCommand}
                     onChange={(e) => setCurrentCommand(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    className="bg-transparent border-none outline-none flex-1 text-green-400"
+                    className="bg-transparent border-none outline-none flex-1 accent-emerald"
                     placeholder="Enter attack command..."
                     autoFocus
                   />

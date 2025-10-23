@@ -46,7 +46,7 @@ export const TeacherDashboard: React.FC = () => {
     try {
       const updated = await courseService.updateCourse(course.id, {
         is_published: !course.is_published
-      } as any);
+      } as Partial<Course>);
       setCourses(courses.map(c => c.id === course.id ? updated : c));
     } catch (error) {
       console.error('Failed to update course:', error);
@@ -55,26 +55,24 @@ export const TeacherDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      <div className="min-h-screen bg-page flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+    <div className="min-h-screen bg-page p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-2">
-              Teacher Dashboard
-            </h1>
-            <p className="text-slate-300">Create and manage your cybersecurity courses</p>
+            <h1 className="text-4xl font-bold text-primary mb-2">Teacher Dashboard</h1>
+            <p className="text-muted">Create and manage your cybersecurity courses</p>
           </div>
           <button
             onClick={() => setShowCreateForm(true)}
-            className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-blue-600 transition-all duration-200 transform hover:scale-105 shadow-lg"
+            className="flex items-center space-x-2 btn-primary px-6 py-3 rounded-xl hover:scale-105 shadow-md"
           >
             <PlusCircle className="h-5 w-5" />
             <span>Create Course</span>
@@ -83,45 +81,45 @@ export const TeacherDashboard: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-green-500/20 to-green-600/20 backdrop-blur-sm border border-green-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-300 text-sm font-medium">My Courses</p>
-                <p className="text-3xl font-bold text-white">{courses.length}</p>
+                <p className="text-muted text-sm font-medium">My Courses</p>
+                <p className="text-3xl font-bold text-contrast">{courses.length}</p>
               </div>
-              <BookOpen className="h-12 w-12 text-green-400" />
+              <BookOpen className="h-12 w-12 text-accent" />
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-300 text-sm font-medium">Published</p>
-                <p className="text-3xl font-bold text-white">{courses.filter(c => c.is_published).length}</p>
+                <p className="text-muted text-sm font-medium">Published</p>
+                <p className="text-3xl font-bold text-contrast">{courses.filter(c => c.is_published).length}</p>
               </div>
-              <Eye className="h-12 w-12 text-blue-400" />
+              <Eye className="h-12 w-12 text-accent" />
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-300 text-sm font-medium">Total Students</p>
-                <p className="text-3xl font-bold text-white">{courses.reduce((sum, c) => sum + (c.enrollment_count || 0), 0)}</p>
+                <p className="text-muted text-sm font-medium">Total Students</p>
+                <p className="text-3xl font-bold text-contrast">{courses.reduce((sum, c) => sum + (c.enrollment_count || 0), 0)}</p>
               </div>
-              <Users className="h-12 w-12 text-purple-400" />
+              <Users className="h-12 w-12 text-accent" />
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm border border-orange-500/30 rounded-2xl p-6">
+          <div className="bg-card border border-card rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-300 text-sm font-medium">Avg Rating</p>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-muted text-sm font-medium">Avg Rating</p>
+                <p className="text-3xl font-bold text-contrast">
                   {courses.length > 0 ? (courses.reduce((sum, c) => sum + (c.rating || 0), 0) / courses.length).toFixed(1) : '0.0'}
                 </p>
               </div>
-              <BarChart className="h-12 w-12 text-orange-400" />
+              <BarChart className="h-12 w-12 text-accent" />
             </div>
           </div>
         </div>

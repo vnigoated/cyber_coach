@@ -67,35 +67,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-page">
       {/* Hero Section */}
       <div className="relative">
         {/* Navigation */}
-        <nav className="relative z-10 px-6 py-4">
+        <nav className="relative z-10 px-6 py-4" aria-label="Main navigation">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Shield className="h-8 w-8 text-orange-500" />
-              <span className="text-2xl font-bold text-white">Career Connect</span>
+              <Shield className="h-8 w-8 accent-amber" aria-hidden />
+              <span className="text-2xl font-bold text-primary">Career Connect</span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <a
                 href="https://cybergame.sparkstudio.co.in/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors"
+                className="px-3 py-2 rounded-md text-muted hover:text-primary transition-colors"
+                aria-label="Open Cyber Game in new tab"
               >
                 Cyber Game
               </a>
-              <button 
+              <button
                 onClick={() => handleGetStarted('student')}
-                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+                className="px-4 py-2 rounded-md btn-primary"
+                aria-label="Sign in as student"
               >
                 Sign In
               </button>
-              
-              <button 
+
+              <button
                 onClick={() => handleGetStarted('student')}
-                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors"
+                className="px-4 py-2 rounded-md btn-primary"
+                aria-label="Get started as student"
               >
                 Get Started
               </button>
@@ -106,66 +109,77 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
         {/* Hero Content */}
         <div className="relative z-10 px-6 py-20">
           <div className="max-w-7xl mx-auto text-center">
-            <div className="flex justify-center mb-8">
+            <div className="flex justify-center mb-8" role="img" aria-label="Career Connect logo">
               <div className="relative">
-                <Shield className="h-24 w-24 text-orange-500 animate-pulse" />
-                <div className="absolute inset-0 h-24 w-24 text-orange-500 animate-ping opacity-20">
+                <Shield className="h-24 w-24 accent-emerald animate-pulse" aria-hidden />
+                  <div className="absolute inset-0 h-24 w-24 accent-emerald animate-ping opacity-20" aria-hidden>
                   <Shield className="h-full w-full" />
                 </div>
               </div>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-                Master Cybersecurity
-              </span>
-              <br />
-              <span className="text-white">Build Your Career</span>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <span className="accent-emerald block">Master Cybersecurity</span>
+              <span className="text-primary block">Build Your Career</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-muted mb-12 max-w-3xl mx-auto">
               Join thousands of professionals advancing their cybersecurity careers with hands-on labs, 
               AI-powered learning, and industry-recognized certifications.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <button
                 onClick={() => handleGetStarted('student')}
-                className="group bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2"
+                className="group btn-primary px-6 py-3 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-102 transition-all duration-250 flex items-center space-x-2"
+                aria-label="Start learning now"
               >
-                <GraduationCap className="h-6 w-6" />
+                <GraduationCap className="h-5 w-5" aria-hidden />
                 <span>Start Learning</span>
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
-              
+
               <button
                 onClick={() => handleGetStarted('teacher')}
-                className="group bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/30 px-8 py-4 rounded-2xl font-semibold text-lg backdrop-blur-sm transition-all duration-300 flex items-center space-x-2"
+                className="group px-6 py-3 rounded-lg bg-muted text-primary border border-card transition-all duration-200 flex items-center space-x-2"
+                aria-label="Teach with us"
               >
-                <Users className="h-6 w-6" />
+                <Users className="h-5 w-5" aria-hidden />
                 <span>Teach with Us</span>
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
+            </div>
+
+            {/* What's New badges */}
+            <div className="flex justify-center gap-3 mt-6 mb-16">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-muted text-primary text-sm font-semibold">
+                <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2" aria-hidden />
+                New: Hands-on Ransomware Lab
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-muted text-primary text-sm font-semibold">
+                <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2" aria-hidden />
+                New: AI-assisted Exam Review
+              </span>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-400 mb-2">50+</div>
-                <div className="text-slate-300">Interactive Labs</div>
+                <div className="text-3xl font-bold accent-emerald mb-2">50+</div>
+                <div className="text-muted">Interactive Labs</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-400 mb-2">1000+</div>
-                <div className="text-slate-300">Students Trained</div>
+                <div className="text-3xl font-bold accent-emerald mb-2">1000+</div>
+                <div className="text-muted">Students Trained</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-400 mb-2">95%</div>
-                <div className="text-slate-300">Success Rate</div>
+                <div className="text-3xl font-bold accent-emerald mb-2">95%</div>
+                <div className="text-muted">Success Rate</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-400 mb-2">24/7</div>
-                <div className="text-slate-300">AI Support</div>
+                <div className="text-3xl font-bold accent-emerald mb-2">24/7</div>
+                <div className="text-muted">AI Support</div>
               </div>
             </div>
           </div>
@@ -174,25 +188,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
 
       {/* Cyber Game Promo Section (moved above Features) */}
       <div className="py-16 px-6">
-        <div className="max-w-6xl mx-auto bg-gradient-to-r from-slate-900/70 to-slate-800/60 border border-white/10 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6">
-          <div className="flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-500 p-4 rounded-2xl">
-            <Gamepad className="h-12 w-12 text-white" />
+          <div className="max-w-6xl mx-auto bg-card border-card rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6">
+          <div className="flex-shrink-0 bg-amber-600 p-4 rounded-2xl" aria-hidden>
+            <Gamepad className="h-12 w-12 text-primary" />
           </div>
           <div className="flex-1 text-center md:text-left">
-            <h3 className="text-2xl font-bold text-white mb-2">Think you're cyber smart?</h3>
-            <p className="text-slate-300 mb-4 max-w-3xl">
+            <h3 className="text-2xl font-bold text-primary mb-2">Think you're cyber smart?</h3>
+            <p className="text-muted mb-4 max-w-3xl">
               Dive into real-world security scenarios, test your reactions, learn from expert feedback, and train your way to a certified cyber-aware badge — all in one interactive game.
             </p>
             <div className="flex justify-center md:justify-start gap-4">
-              <a
-                href="http://localhost:9002"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-5 py-3 rounded-xl font-semibold transition-transform transform hover:scale-105"
-              >
-                <span>Play the Cyber Game</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
+                <a
+                  href="http://localhost:9002"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 btn-primary px-5 py-3 rounded-xl font-semibold transition-transform transform hover:scale-105"
+                  aria-label="Play the Cyber Game"
+                >
+                  <span>Play the Cyber Game</span>
+                  <ArrowRight className="h-4 w-4" />
+                </a>
 
             </div>
           </div>
@@ -211,64 +226,64 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature Cards */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-              <div className="bg-blue-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <BookOpen className="h-6 w-6 text-blue-400" />
+            <div className="bg-card border-card rounded-2xl p-6 hover:bg-muted transition-all duration-300 group">
+              <div className="bg-muted w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <BookOpen className="h-6 w-6 accent-emerald" aria-hidden />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Interactive Courses</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-primary mb-2">Interactive Courses</h3>
+              <p className="text-muted">
                 OWASP Top 10, NIST Framework, and industry-standard cybersecurity curricula with hands-on practice.
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-              <div className="bg-green-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Target className="h-6 w-6 text-green-400" />
+            <div className="bg-card border-card rounded-2xl p-6 hover:bg-muted transition-all duration-300 group">
+              <div className="bg-muted w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Target className="h-6 w-6 accent-emerald" aria-hidden />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Virtual Labs</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-primary mb-2">Virtual Labs</h3>
+              <p className="text-muted">
                 Real-world cybersecurity scenarios in safe, controlled environments. Practice penetration testing and vulnerability assessment.
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-              <div className="bg-purple-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Brain className="h-6 w-6 text-purple-400" />
+            <div className="bg-card border-card rounded-2xl p-6 hover:bg-muted transition-all duration-300 group">
+              <div className="bg-muted w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Brain className="h-6 w-6 accent-emerald" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">AI-Powered Assistant</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-primary mb-2">AI-Powered Assistant</h3>
+              <p className="text-muted">
                 Get instant help with our intelligent chatbot powered by advanced AI. Available 24/7 for your learning journey.
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-              <div className="bg-orange-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Award className="h-6 w-6 text-orange-400" />
+            <div className="bg-card border-card rounded-2xl p-6 hover:bg-muted transition-all duration-300 group">
+              <div className="bg-muted w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Award className="h-6 w-6 accent-amber" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Industry Certifications</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-primary mb-2">Industry Certifications</h3>
+              <p className="text-muted">
                 Earn recognized certificates that validate your cybersecurity skills and boost your career prospects.
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-              <div className="bg-red-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Zap className="h-6 w-6 text-red-400" />
+            <div className="bg-card border-card rounded-2xl p-6 hover:bg-muted transition-all duration-300 group">
+              <div className="bg-muted w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Zap className="h-6 w-6 accent-amber" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Real-time Analytics</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-primary mb-2">Real-time Analytics</h3>
+              <p className="text-muted">
                 Track your progress with detailed analytics and personalized learning recommendations powered by AI.
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-              <div className="bg-indigo-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Globe className="h-6 w-6 text-indigo-400" />
+            <div className="bg-card border-card rounded-2xl p-6 hover:bg-muted transition-all duration-300 group">
+              <div className="bg-muted w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Globe className="h-6 w-6 accent-emerald" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Global Community</h3>
-              <p className="text-slate-300">
+              <h3 className="text-xl font-semibold text-primary mb-2">Global Community</h3>
+              <p className="text-muted">
                 Connect with cybersecurity professionals worldwide. Share knowledge, collaborate, and grow together.
               </p>
             </div>
@@ -290,15 +305,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Beginner Path */}
-            <div className="bg-white/5 border border-blue-500/30 rounded-2xl p-8 hover:scale-105 transition-transform duration-300">
+            <div className="bg-card border-card rounded-2xl p-8 hover:scale-105 transition-transform duration-300">
               <div className="text-center mb-6">
-                <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-8 w-8 text-blue-400" />
+                <div className="bg-muted w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="h-8 w-8 accent-emerald" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Beginner</h3>
-                <p className="text-blue-200">Perfect for newcomers to cybersecurity</p>
+                <p className="text-muted">Perfect for newcomers to cybersecurity</p>
               </div>
               
               <ul className="space-y-3 mb-8">
@@ -322,26 +337,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
 
               <button 
                 onClick={() => handleGetStarted('student')}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
+                className="w-full btn-primary py-3 rounded-xl font-semibold transition-colors"
               >
                 Start Learning
               </button>
             </div>
 
             {/* Intermediate Path */}
-            <div className="bg-white/5 border border-orange-500/30 rounded-2xl p-8 hover:scale-105 transition-transform duration-300 relative">
+            <div className="bg-card border-card rounded-2xl p-8 hover:scale-105 transition-transform duration-300 relative">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                <span className="bg-amber-600 text-primary px-4 py-1 rounded-full text-sm font-semibold">
                   Most Popular
                 </span>
               </div>
               
               <div className="text-center mb-6">
-                <div className="bg-orange-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-8 w-8 text-orange-400" />
+                <div className="bg-muted w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Target className="h-8 w-8 accent-amber" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Intermediate</h3>
-                <p className="text-orange-200">For those with basic cybersecurity knowledge</p>
+                <p className="text-muted">For those with basic cybersecurity knowledge</p>
               </div>
               
               <ul className="space-y-3 mb-8">
@@ -365,20 +380,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
 
               <button 
                 onClick={() => handleGetStarted('student')}
-                className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white py-3 rounded-xl font-semibold transition-all duration-300"
+                className="w-full btn-primary py-3 rounded-xl font-semibold transition-all duration-300"
               >
                 Start Learning
               </button>
             </div>
 
             {/* Advanced Path */}
-            <div className="bg-white/5 border border-purple-500/30 rounded-2xl p-8 hover:scale-105 transition-transform duration-300">
+            <div className="bg-card border-card rounded-2xl p-8 hover:scale-105 transition-transform duration-300">
               <div className="text-center mb-6">
-                <div className="bg-purple-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Lock className="h-8 w-8 text-purple-400" />
+                <div className="bg-muted w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="h-8 w-8 accent-emerald" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Advanced</h3>
-                <p className="text-purple-200">For experienced cybersecurity professionals</p>
+                <p className="text-muted">For experienced cybersecurity professionals</p>
               </div>
               
               <ul className="space-y-3 mb-8">
@@ -402,7 +417,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
 
               <button 
                 onClick={() => handleGetStarted('student')}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-semibold transition-colors"
+                className="w-full btn-primary py-3 rounded-xl font-semibold transition-colors"
               >
                 Start Learning
               </button>
@@ -423,7 +438,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
               <div className="flex mb-4">
                 {[...Array(5)].map((_, i) => (
@@ -435,12 +450,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 made complex concepts easy to understand and apply in real-world scenarios."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">
+                <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center text-white font-semibold">
                   SR
                 </div>
                 <div className="ml-3">
-                  <div className="text-white font-semibold">Sarah Rodriguez</div>
-                  <div className="text-slate-400 text-sm">Security Analyst at TechCorp</div>
+                  <div className="text-primary font-semibold">Sarah Rodriguez</div>
+                  <div className="text-muted text-sm">Security Analyst at TechCorp</div>
                 </div>
               </div>
             </div>
@@ -456,12 +471,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 techniques in a safe environment before applying them in my job."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-semibold">
+                <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center text-white font-semibold">
                   MJ
                 </div>
                 <div className="ml-3">
-                  <div className="text-white font-semibold">Michael Johnson</div>
-                  <div className="text-slate-400 text-sm">Penetration Tester at SecureNet</div>
+                  <div className="text-primary font-semibold">Michael Johnson</div>
+                  <div className="text-muted text-sm">Penetration Tester at SecureNet</div>
                 </div>
               </div>
             </div>
@@ -477,12 +492,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 engaging content and track student progress. The platform is intuitive and powerful."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
+                <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center text-white font-semibold">
                   AC
                 </div>
                 <div className="ml-3">
-                  <div className="text-white font-semibold">Dr. Amanda Chen</div>
-                  <div className="text-slate-400 text-sm">Cybersecurity Professor</div>
+                  <div className="text-primary font-semibold">Dr. Amanda Chen</div>
+                  <div className="text-muted text-sm">Cybersecurity Professor</div>
                 </div>
               </div>
             </div>

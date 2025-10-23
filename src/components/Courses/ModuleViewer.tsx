@@ -50,9 +50,9 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
     return modules.every(m => m.completed);
   };
 
-  if (loading) return <div className="p-6">Loading module...</div>;
+  if (loading) return <div className="p-6 text-slate-200">Loading module...</div>;
   if (!course || !module) {
-    return <div>Module not found</div>;
+    return <div className="p-6 text-slate-200">Module not found</div>;
   }
 
   const allModules = course.course_modules ?? course.modules ?? [];
@@ -137,13 +137,13 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-slate-900 min-h-screen">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={onBack}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center space-x-2 text-slate-300 hover:text-slate-100 transition-colors"
           >
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Course</span>
@@ -153,21 +153,21 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
             <button
               onClick={() => markModuleCompleted(true)}
               disabled={module.completed}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${module.completed ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-cyan-600 text-white hover:bg-cyan-700'}`}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${module.completed ? 'bg-slate-700 text-slate-400 cursor-not-allowed' : 'bg-amber-600 text-slate-100 hover:bg-amber-700'}`}
               title="Mark this module as completed"
             >
               {module.completed ? 'Completed' : 'Mark as Completed'}
             </button>
 
             {/* Go to next module */}
-            <button
-              onClick={goToNextModule}
-              disabled={currentIndex < 0 || currentIndex >= allModules.length - 1}
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentIndex < 0 || currentIndex >= allModules.length - 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-emerald-500 text-white hover:bg-emerald-600'}`}
-              title="Go to next module"
-            >
-              Next Module
-            </button>
+              <button
+                onClick={goToNextModule}
+                disabled={currentIndex < 0 || currentIndex >= allModules.length - 1}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentIndex < 0 || currentIndex >= allModules.length - 1 ? 'bg-slate-700 text-slate-400 cursor-not-allowed' : 'bg-emerald-500 text-slate-100 hover:bg-emerald-600'}`}
+                title="Go to next module"
+              >
+                Next Module
+              </button>
 
             {module.completed && (
               <div className="flex items-center space-x-2 text-green-600">
@@ -179,11 +179,11 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
         </div>
 
         {/* Module Info */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">{module.title}</h1>
-          <p className="text-gray-600 mb-6">{module.description}</p>
+          <div className="bg-slate-800 rounded-lg shadow p-8 mb-6">
+          <h1 className="text-2xl font-bold text-slate-100 mb-2">{module.title}</h1>
+          <p className="text-slate-300 mb-6">{module.description}</p>
           
-          <div className="flex items-center space-x-6 text-sm text-gray-500">
+          <div className="flex items-center space-x-6 text-sm text-slate-400">
             <div className="flex items-center space-x-1">
               <Clock className="h-4 w-4" />
               <span>~2 hours</span>
@@ -202,15 +202,15 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow-md mb-6">
-          <div className="border-b border-gray-200">
+          <div className="bg-slate-800 rounded-lg shadow mb-6">
+          <div className="border-b border-slate-700">
             <nav className="flex space-x-8 px-6">
               <button
                 onClick={() => setActiveTab('content')}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'content'
-                    ? 'border-cyan-500 text-cyan-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-amber-500 text-amber-400'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center space-x-2">
@@ -224,8 +224,8 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
                   onClick={() => setActiveTab('lab')}
                   className={`py-4 px-1 border-b-2 font-medium text-sm ${
                     activeTab === 'lab'
-                      ? 'border-cyan-500 text-cyan-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      ? 'border-amber-500 text-amber-400'
+                      : 'border-transparent text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   <div className="flex items-center space-x-2">
@@ -239,8 +239,8 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
                 onClick={() => setActiveTab('test')}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'test'
-                    ? 'border-cyan-500 text-cyan-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-amber-500 text-amber-400'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center space-x-2">
@@ -253,12 +253,12 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
 
           <div className="p-6">
             {activeTab === 'content' && (
-              <div className="prose max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: module.content.replace(/\n/g, '<br/>').replace(/```([^`]+)```/g, '<pre class="bg-gray-100 p-4 rounded"><code>$1</code></pre>').replace(/`([^`]+)`/g, '<code class="bg-gray-100 px-1 rounded">$1</code>').replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mb-4">$1</h1>').replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold mb-3 mt-6">$1</h2>').replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold mb-2 mt-4">$1</h3>').replace(/^- (.+)$/gm, '<li class="ml-4">$1</li>').replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4">$2</li>') }} />
+              <div className="prose max-w-none text-slate-200">
+                <div dangerouslySetInnerHTML={{ __html: module.content.replace(/\n/g, '<br/>').replace(/```([^`]+)```/g, '<pre class="bg-slate-800 border border-slate-700 p-4 rounded"><code class="text-slate-200">$1</code></pre>').replace(/`([^`]+)`/g, '<code class="bg-slate-700 px-1 rounded text-slate-200">$1</code>').replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mb-4">$1</h1>').replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold mb-3 mt-6">$1</h2>').replace(/^### (.+)$/gm, '<h3 class="text-lg font-bold mb-2 mt-4">$1</h3>').replace(/^- (.+)$/gm, '<li class="ml-4">$1</li>').replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4">$2</li>') }} />
                 
                 {module.videoUrl && (
                   <div className="mt-8">
-                    <h3 className="font-bold text-gray-900 mb-4">Video Lecture</h3>
+                    <h3 className="font-bold text-slate-100 mb-4">Video Lecture</h3>
                     <VideoPlayer
                       videoUrl="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                       title={`${module.title} - Video Lecture`}
@@ -272,12 +272,12 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
 
             {activeTab === 'lab' && module.labUrl && (
               <div className="text-center py-8">
-                <Flask className="h-16 w-16 text-cyan-500 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Hands-on Lab</h3>
-                <p className="text-gray-600 mb-6">
+                <Flask className="h-16 w-16 text-amber-400 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-slate-100 mb-4">Hands-on Lab</h3>
+                <p className="text-slate-300 mb-6">
                   Practice what you've learned with interactive exercises and real-world scenarios.
                 </p>
-                <button className="bg-cyan-600 text-white px-6 py-3 rounded-lg hover:bg-cyan-700 transition-colors">
+                <button className="bg-amber-600 text-slate-100 px-6 py-3 rounded-lg hover:bg-amber-700 transition-colors">
                   Start Lab Environment
                 </button>
               </div>
@@ -286,8 +286,8 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
             {activeTab === 'test' && (
               <div className="text-center py-8">
                 <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Module Test</h3>
-                <p className="text-gray-600 mb-6">
+                <h3 className="text-xl font-bold text-slate-100 mb-4">Module Test</h3>
+                <p className="text-slate-300 mb-6">
                   Test your understanding of this module with a focused quiz.
                 </p>
                 {module.testScore ? (
@@ -299,7 +299,7 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
                 ) : null}
                 <button
                   onClick={() => setShowTest(true)}
-                  className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+                  className="bg-green-600 text-slate-100 px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
                 >
                   {module.testScore ? 'Retake Test' : 'Take Test'}
                 </button>
@@ -310,31 +310,31 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
 
         {/* Complete Module Button or Certificate */}
         {!module.completed ? (
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-card rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-gray-900">Ready to complete this module?</h3>
-                <p className="text-gray-600">Take the test to mark this module as complete.</p>
+                <h3 className="font-bold text-primary">Ready to complete this module?</h3>
+                <p className="text-muted">Take the test to mark this module as complete.</p>
               </div>
               <button
                 onClick={() => setShowTest(true)}
-                className="bg-cyan-600 text-white px-6 py-3 rounded-lg hover:bg-cyan-700 transition-colors"
+                className="btn-primary text-slate-900 px-6 py-3 rounded-lg hover:opacity-95 transition-colors"
               >
                 Take Module Test
               </button>
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-card rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-gray-900">Module Completed!</h3>
-                <p className="text-gray-600">You've successfully completed this module.</p>
+                <h3 className="font-bold text-primary">Module Completed!</h3>
+                <p className="text-muted">You've successfully completed this module.</p>
               </div>
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setShowTest(true)}
-                  className="text-cyan-600 hover:text-cyan-700 transition-colors flex items-center space-x-2"
+                  className="text-accent hover:text-accent-600 transition-colors flex items-center space-x-2"
                 >
                   <CheckCircle className="h-5 w-5" />
                   <span>Retake Test</span>
@@ -346,13 +346,13 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
 
         {/* Certificate Section */}
         {course && isAllModulesCompleted(course) && (
-          <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg shadow-md p-6 mt-6 border border-cyan-200">
+          <div className="bg-card rounded-lg shadow-md p-6 mt-6 border border-slate-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <Award className="h-12 w-12 text-cyan-600" />
+                <Award className="h-12 w-12 text-accent" />
                 <div>
-                  <h3 className="font-bold text-gray-900">Course Completed!</h3>
-                  <p className="text-gray-600">Congratulations! You've completed all modules.</p>
+                  <h3 className="font-bold text-primary">Course Completed!</h3>
+                  <p className="text-muted">Congratulations! You've completed all modules.</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
@@ -360,7 +360,7 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
                 {currentIndex === allModules.length - 1 ? (
                   <button
                     onClick={completeCourseAndGenerateCertificate}
-                    className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center space-x-2"
+                    className="bg-emerald-600 text-slate-100 px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center space-x-2"
                   >
                     <Award className="h-5 w-5" />
                     <span>Complete Course</span>
@@ -368,7 +368,7 @@ export const ModuleViewer: React.FC<ModuleViewerProps> = ({ courseId, moduleId, 
                 ) : (
                   <button
                     onClick={() => setShowCertificate(true)}
-                    className="bg-cyan-600 text-white px-6 py-3 rounded-lg hover:bg-cyan-700 transition-colors flex items-center space-x-2"
+                    className="btn-primary text-slate-900 px-6 py-3 rounded-lg hover:opacity-95 transition-colors flex items-center space-x-2"
                   >
                     <Award className="h-5 w-5" />
                     <span>View Certificate</span>

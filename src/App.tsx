@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
 import { Header } from './components/Layout/Header';
 import { Sidebar } from './components/Layout/Sidebar';
 import { LandingPage } from './components/Landing/LandingPage';
@@ -147,7 +146,7 @@ const AppContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+  <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
       <Header onChatToggle={() => setIsChatOpen(!isChatOpen)} />
       <div className="flex">
         <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
@@ -162,11 +161,9 @@ const AppContent = () => {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
