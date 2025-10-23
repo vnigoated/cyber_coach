@@ -198,17 +198,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
               Dive into real-world security scenarios, test your reactions, learn from expert feedback, and train your way to a certified cyber-aware badge — all in one interactive game.
             </p>
             <div className="flex justify-center md:justify-start gap-4">
-                <a
-                  href="http://localhost:9002"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 btn-primary px-5 py-3 rounded-xl font-semibold transition-transform transform hover:scale-105"
-                  aria-label="Play the Cyber Game"
-                >
-                  <span>Play the Cyber Game</span>
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-
+              <a
+                href="https://cybergame.sparkstudio.co.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 btn-primary px-5 py-3 rounded-xl font-semibold transition-transform transform hover:scale-105"
+                aria-label="Play the Cyber Game"
+              >
+                <span>Play the Cyber Game</span>
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
           </div>
         </div>
