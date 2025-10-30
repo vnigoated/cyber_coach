@@ -196,14 +196,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 Start Learning
               </button>
 
-              <button
-                onClick={() => setShowDemo(true)}
-                className="inline-flex items-center gap-2 px-4 py-3 border border-white/10 rounded-lg text-slate-200 hover:bg-white/5 transition"
-              >
-                <Video className="h-4 w-4 text-amber-400" />
-                Watch Demo
-              </button>
-
               <a
                 className="ml-2 inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white"
                 href="https://cybergame.sparkstudio.co.in/"
